@@ -1,3 +1,5 @@
+package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class PIDCounterforce {
@@ -33,7 +35,7 @@ public class PIDCounterforce {
         lastError = error;
 
         // Calculate PID output
-        double output = kp * error + ki * errorSum + kd * derivativeError;
+        double output = kp * error + ki * errorSum + kd * derivativeError *-1;
 
         // Apply output to the motor, limiting the power to a safe range
         double motorPower = Math.min(Math.max(output, -1.0), 1.0);
