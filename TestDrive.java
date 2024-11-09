@@ -36,6 +36,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
+//import PIDCounterforce;
+
 /*
  * This OpMode executes a Tank Drive control TeleOp a direct drive robot
  * The code is structured as an Iterative OpMode
@@ -59,23 +61,27 @@ public class TestDrive extends OpMode{
     public DcMotor  leftArm     = null;
     public Servo    leftClaw    = null;
     public Servo    rightClaw   = null;
+    
+    public PIDCounterforce PID = null;
 
     double clawOffset = 0;
 
     public static final double MID_SERVO   =  0.5 ;
     public static final double CLAW_SPEED  = 0.02 ;        // sets rate to move servo
-    public static final double ARM_UP_POWER    =  0.50 ;   // Run arm motor up at 50% power
-    public static final double ARM_DOWN_POWER  = -0.25 ;   // Run arm motor down at -25% power
+    public static final double ARM_UP_POWER    =  1 ;   // Run arm motor up at 50% power
+    public static final double ARM_DOWN_POWER  = -1 ;   // Run arm motor down at -25% power
 
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
+
         // Define and Initialize Motors
         leftDrive  = hardwareMap.get(DcMotor.class, "RIGHT_MOTOR");
         rightDrive = hardwareMap.get(DcMotor.class, "LEFT_MOTOR");
         leftArm    = hardwareMap.get(DcMotor.class, "ARM_MOTOR");
+        PID = new PIDCounterforce(leftArm);
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left and right sticks forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -88,8 +94,8 @@ public class TestDrive extends OpMode{
         // rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Define and initialize ALL installed servos.
-        leftClaw  = hardwareMap.get(Servo.class, "INTAKE_TURN");
-        rightClaw = hardwareMap.get(Servo.class, "INTAKE_GRAB");
+        leftClaw  = hardwareMap.get(Servo.class, "CLAW_LEFT");
+        rightClaw = hardwareMap.get(Servo.class, "CLAW_RIGHT");
         leftClaw.setPosition(MID_SERVO);
         rightClaw.setPosition(MID_SERVO);
 
@@ -118,10 +124,10 @@ public class TestDrive extends OpMode{
     public void loop() {
         double left;
         double right;
-
+        
         // Run wheels in tank mode (note: The joystick goes negative when pushed forward, so negate it)
-        left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
+        left = -gamepad1.left_stick_y/1.7;
+        right = -gamepad1.right_stick_y/1.7;
 
         leftDrive.setPower(left);
         rightDrive.setPower(right);
@@ -133,17 +139,21 @@ public class TestDrive extends OpMode{
             clawOffset -= CLAW_SPEED;
 
         // Move both servos to new position.  Assume servos are mirror image of each other.
-        clawOffset = Range.clip(clawOffset, -0.5, 0.5);
+        clawOffset = Range.clip(clawOffset, -0.15, 0.27);
         leftClaw.setPosition(MID_SERVO + clawOffset);
-        // rightClaw.setPosition(MID_SERVO - clawOffset);
+        rightClaw.setPosition(MID_SERVO - clawOffset);
 
         // Use gamepad buttons to move the arm up (Y) and down (A)
-        if (gamepad1.y)
+        if (gamepad1.y) 
             leftArm.setPower(ARM_UP_POWER);
+            
         else if (gamepad1.a)
             leftArm.setPower(ARM_DOWN_POWER);
         else
-            leftArm.setPower(0.0);
+            {
+                leftArm.setPower(0.0);
+            PID.update();
+            }
 
         // Send telemetry message to signify robot running;
         telemetry.addData("claw",  "Offset = %.2f", clawOffset);
