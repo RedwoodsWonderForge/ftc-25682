@@ -63,7 +63,7 @@ public class AutoRed extends LinearOpMode {
 
         duration = 0.8;
         IsShooting = false;
-        ShootPower = 0.8;
+        ShootPower = 1;
         maxDrivePower = 1;
         turn = 0;
         forward = 0;
