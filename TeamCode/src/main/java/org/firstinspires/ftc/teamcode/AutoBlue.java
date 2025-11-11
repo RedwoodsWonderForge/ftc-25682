@@ -1,13 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "testautoBlue (Blocks to Java)")
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+
+@Autonomous(name = "AutoBlue")
 public class AutoBlue extends LinearOpMode {
+
+    private Limelight3A limelight;
+    private IMU imu;
 
     private Servo deflecLeft;
     private DcMotor LAUNCHER;
@@ -19,10 +28,10 @@ public class AutoBlue extends LinearOpMode {
     private CRServo RIGHT;
     private CRServo LEFT;
 
-    double ShootPower;
     int turn;
     boolean IsShooting;
     int forward;
+    double ShootPower;
     int maxDrivePower;
     int strafe;
 
@@ -49,6 +58,7 @@ public class AutoBlue extends LinearOpMode {
         telemetry.addLine("waiting for start");
         telemetry.update();
         waitForStart();
+        limelight.start();
         telemetry.addLine("auto drive");
         telemetry.update();
         autoDrive();
@@ -63,7 +73,7 @@ public class AutoBlue extends LinearOpMode {
 
         duration = 0.8;
         IsShooting = false;
-        ShootPower = 0.85;
+        ShootPower = 1;
         maxDrivePower = 1;
         turn = 0;
         forward = 0;
@@ -71,6 +81,12 @@ public class AutoBlue extends LinearOpMode {
         deflecLeft.setDirection(Servo.Direction.REVERSE);
         // "really weird" -Misty
         aprallag = false;
+        limelight = hardwareMap.get(Limelight3A.class, "Limelight");
+        limelight.pipelineSwitch(1);
+        imu = hardwareMap.get(IMU.class, "imu");
+        RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
+        imu.initialize(new IMU.Parameters(revHubOrientationOnRobot));
     }
 
     /**
@@ -165,8 +181,9 @@ public class AutoBlue extends LinearOpMode {
         forward = 1;
         prosessInputsAndSleep(1000);
         turn = 1;
-        prosessInputsAndSleep(300);
-        sleep(500);
+        prosessInputsAndSleep(280);
+//        sleep(500);
+        aim();
     }
 
     /**
@@ -175,9 +192,29 @@ public class AutoBlue extends LinearOpMode {
     private void driveToPlayerStationAndBack() {
         forward = 1;
         prosessInputsAndSleep(670);
-        LAUNCHER.setPower(0.65);
+        LAUNCHER.setPower(ShootPower);
         sleep(2700);
         forward = -1;
         prosessInputsAndSleep(660);
+    }
+    public void aim() {
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        limelight.updateRobotOrientation(orientation.getYaw());
+        LLResult llResult = limelight.getLatestResult();
+        if (llResult != null && llResult.isValid()) {
+//            Pose3D botPose = llResult.getBotpose_MT2();
+            double y = llResult.getTy();
+            while (y < -3 || y > 3) {
+                telemetry.addData("Ty", y);
+                int turn = (y > 0)?-1:1;
+                prosessInputsAndSleep(100);
+                y = llResult.getTy();
+            }
+        }
+        telemetry.update();
+        // getLimelightData
+        //getTyData
+        //move y to range (during shooting and going to loading)
+
     }
 }
