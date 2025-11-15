@@ -28,12 +28,12 @@ public class AutoBlue extends LinearOpMode {
     private CRServo RIGHT;
     private CRServo LEFT;
 
-    int turn;
+    double turn;
     boolean IsShooting;
-    int forward;
+    double forward;
     double ShootPower;
-    int maxDrivePower;
-    int strafe;
+    double maxDrivePower;
+    double strafe;
 
     /**
      * This sample contains the bare minimum Blocks for any regular OpMode. The 3 blue
@@ -55,12 +55,8 @@ public class AutoBlue extends LinearOpMode {
         LEFT = hardwareMap.get(CRServo.class, "LEFT");
 
         initalSetup();
-        telemetry.addLine("waiting for start");
-        telemetry.update();
         waitForStart();
         limelight.start();
-        telemetry.addLine("auto drive");
-        telemetry.update();
         autoDrive();
     }
 
@@ -96,34 +92,19 @@ public class AutoBlue extends LinearOpMode {
         LAUNCHER.setPower(ShootPower);
         deflecLeft.setPosition(0.62);
         deflecRight.setPosition(0.2);
-        telemetry.addLine("driving to goal");
-        telemetry.update();
         driveToGoal();
-        telemetry.addLine("shooting 3 artifacts");
-        telemetry.update();
         shootThreeArtifacts();
-        telemetry.addLine("go home");
-        telemetry.update();
         driveToPlayerStationAndBack();
-        telemetry.addLine("last 3 artifacts");
-        telemetry.update();
         shootThreeArtifacts();
-        telemetry.addLine("auto-drive complete");
-        telemetry.update();
     }
 
     /**
      * Describe this function...
      */
     private void prosessInputsAndSleep(int duration) {
-        telemetry.addLine("driving");
-        telemetry.addData("duration", duration);
-        telemetry.update();
         // "This makes the code cleaner"??
         processDriveInputs();
         sleep((long) duration);
-        telemetry.addLine("done driving");
-        telemetry.update();
         // Stop all movement after sleep
         turn = 0;
         forward = 0;
@@ -182,8 +163,14 @@ public class AutoBlue extends LinearOpMode {
         prosessInputsAndSleep(1000);
         turn = 1;
         prosessInputsAndSleep(280);
-//        sleep(500);
+        sleep(500);
         aim();
+        telemetry.addData("aim","firsty");
+        telemetry.update();
+        sleep(1000);
+        aim();
+        telemetry.addData("aim","secondy");
+        telemetry.update();
     }
 
     /**
@@ -191,27 +178,35 @@ public class AutoBlue extends LinearOpMode {
      */
     private void driveToPlayerStationAndBack() {
         forward = 1;
-        prosessInputsAndSleep(670);
+        prosessInputsAndSleep(630);
         LAUNCHER.setPower(ShootPower);
         sleep(2700);
         forward = -1;
-        prosessInputsAndSleep(660);
+        prosessInputsAndSleep(630);
     }
+
     public void aim() {
+        maxDrivePower = .15;
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         limelight.updateRobotOrientation(orientation.getYaw());
         LLResult llResult = limelight.getLatestResult();
+        telemetry.addData("TagFound",llResult != null && llResult.isValid());
+        telemetry.update();
         if (llResult != null && llResult.isValid()) {
 //            Pose3D botPose = llResult.getBotpose_MT2();
             double y = llResult.getTy();
             while (y < -3 || y > 3) {
                 telemetry.addData("Ty", y);
-                int turn = (y > 0)?-1:1;
+                telemetry.update();
+                turn = (y > 0) ? -1 : 1;
                 prosessInputsAndSleep(100);
+                orientation = imu.getRobotYawPitchRollAngles();
+                limelight.updateRobotOrientation(orientation.getYaw());
+                llResult = limelight.getLatestResult();
                 y = llResult.getTy();
             }
         }
-        telemetry.update();
+        maxDrivePower = 1;
         // getLimelightData
         //getTyData
         //move y to range (during shooting and going to loading)
