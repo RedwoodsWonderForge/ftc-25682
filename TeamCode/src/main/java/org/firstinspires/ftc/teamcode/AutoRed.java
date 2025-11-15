@@ -55,12 +55,8 @@ public class AutoRed extends LinearOpMode {
         LEFT = hardwareMap.get(CRServo.class, "LEFT");
 
         initalSetup();
-        telemetry.addLine("waiting for start");
-        telemetry.update();
         waitForStart();
         limelight.start();
-        telemetry.addLine("auto drive");
-        telemetry.update();
         autoDrive();
     }
 
@@ -98,13 +94,8 @@ public class AutoRed extends LinearOpMode {
         deflecRight.setPosition(0.2);
         driveToGoal();
         shootThreeArtifacts();
-
         driveToPlayerStationAndBack();
-        telemetry.addLine("last 3 artifacts");
-        telemetry.update();
         shootThreeArtifacts();
-        telemetry.addLine("auto-drive complete");
-        telemetry.update();
     }
 
     /**
@@ -195,7 +186,7 @@ public class AutoRed extends LinearOpMode {
     }
 
     public void aim() {
-        maxDrivePower = .25;
+        maxDrivePower = .15;
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         limelight.updateRobotOrientation(orientation.getYaw());
         LLResult llResult = limelight.getLatestResult();
@@ -215,7 +206,7 @@ public class AutoRed extends LinearOpMode {
                 y = llResult.getTy();
             }
         }
-        telemetry.update();
+        maxDrivePower = 1;
         // getLimelightData
         //getTyData
         //move y to range (during shooting and going to loading)
