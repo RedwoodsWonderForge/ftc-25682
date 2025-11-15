@@ -94,8 +94,9 @@ public class AutoRed extends LinearOpMode {
         deflecRight.setPosition(0.2);
         driveToGoal();
         shootThreeArtifacts();
-        driveToPlayerStationAndBack();
-        shootThreeArtifacts();
+       // driveToPlayerStationAndBack();
+       // shootThreeArtifacts();
+        leave();
     }
 
     /**
@@ -153,6 +154,11 @@ public class AutoRed extends LinearOpMode {
             }
         }
         LAUNCHER.setPower(0);
+    }
+
+    private void leave() {
+        forward = 1;
+        prosessInputsAndSleep(290);
     }
 
     /**
