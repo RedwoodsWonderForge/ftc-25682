@@ -104,7 +104,7 @@ public class AutoRed extends LinearOpMode {
     private void prosessInputsAndSleep(int duration) {
         // "This makes the code cleaner"??
         processDriveInputs();
-        sleep((long) duration);
+        sleep(duration);
         // Stop all movement after sleep
         turn = 0;
         forward = 0;
@@ -160,7 +160,7 @@ public class AutoRed extends LinearOpMode {
      */
     private void driveToGoal() {
         forward = 1;
-        prosessInputsAndSleep(1000);
+        prosessInputsAndSleep(1200);
         turn = -1;
         prosessInputsAndSleep(280);
         sleep(500);
@@ -178,11 +178,12 @@ public class AutoRed extends LinearOpMode {
      */
     private void driveToPlayerStationAndBack() {
         forward = 1;
-        prosessInputsAndSleep(630);
+        prosessInputsAndSleep(590);
         LAUNCHER.setPower(ShootPower);
         sleep(2700);
         forward = -1;
         prosessInputsAndSleep(630);
+        aim();
     }
 
     public void aim() {
