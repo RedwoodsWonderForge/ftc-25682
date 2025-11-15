@@ -94,8 +94,9 @@ public class AutoBlue extends LinearOpMode {
         deflecRight.setPosition(0.2);
         driveToGoal();
         shootThreeArtifacts();
-        driveToPlayerStationAndBack();
-        shootThreeArtifacts();
+        // driveToPlayerStationAndBack();
+        // shootThreeArtifacts();
+        leave();
     }
 
     /**
@@ -104,7 +105,7 @@ public class AutoBlue extends LinearOpMode {
     private void prosessInputsAndSleep(int duration) {
         // "This makes the code cleaner"??
         processDriveInputs();
-        sleep((long) duration);
+        sleep(duration);
         // Stop all movement after sleep
         turn = 0;
         forward = 0;
@@ -155,12 +156,17 @@ public class AutoBlue extends LinearOpMode {
         LAUNCHER.setPower(0);
     }
 
+    private void leave() {
+        forward = 1;
+        prosessInputsAndSleep(290);
+    }
+
     /**
      * Describe this function...
      */
     private void driveToGoal() {
         forward = 1;
-        prosessInputsAndSleep(1000);
+        prosessInputsAndSleep(1200);
         turn = 1;
         prosessInputsAndSleep(280);
         sleep(500);
@@ -178,11 +184,12 @@ public class AutoBlue extends LinearOpMode {
      */
     private void driveToPlayerStationAndBack() {
         forward = 1;
-        prosessInputsAndSleep(630);
+        prosessInputsAndSleep(590);
         LAUNCHER.setPower(ShootPower);
         sleep(2700);
         forward = -1;
         prosessInputsAndSleep(630);
+        aim();
     }
 
     public void aim() {
