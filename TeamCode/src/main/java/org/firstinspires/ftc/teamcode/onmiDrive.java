@@ -1,13 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @TeleOp(name = "omniDrive")
 public class onmiDrive extends LinearOpMode {
@@ -21,11 +25,17 @@ public class onmiDrive extends LinearOpMode {
     public Servo deflecLeft;
     public CRServo LEFT;
     public CRServo RIGHT;
+    private Limelight3A limelight;
+    private IMU imu;
 
     double frontLeftPower;
     double backLeftPower;
     double frontRightPower;
     double backRightPower;
+    double forward;
+    double turn;
+    double strafe;
+    double maxDrivePower;
     // int testing = 0;
     double counter = 85.0;
     /**
@@ -56,6 +66,8 @@ public class onmiDrive extends LinearOpMode {
         double max;
         boolean yPressed = false;
         boolean aPressed = false;
+        boolean xPressed = false;
+        boolean aimMode = false;
 
 
         FL_MOTOR = hardwareMap.get(DcMotor.class, "FL_MOTOR");
@@ -124,6 +136,12 @@ public class onmiDrive extends LinearOpMode {
                 counter--;
                 aPressed = false;
             }
+            if(gamepad1.x){
+                xPressed = true;
+            } if (!gamepad1.x && xPressed){
+                aimMode = !aimMode;
+                xPressed = false;
+            }
             if (counter>100.0){
                 counter = 100.0;
             }
@@ -144,11 +162,15 @@ public class onmiDrive extends LinearOpMode {
             } else fineAim = 1;
 
             // Send calculated power to wheels and launcher.
-            FL_MOTOR.setPower(frontLeftPower);
-            FR_MOTOR.setPower(frontRightPower);
-            BL_MOTOR.setPower(backLeftPower);
-            BR_MOTOR.setPower(backRightPower);
-            LAUNCHER.setVelocity(launchPower);
+           if (!aimMode) {
+               FL_MOTOR.setPower(frontLeftPower);
+               FR_MOTOR.setPower(frontRightPower);
+               BL_MOTOR.setPower(backLeftPower);
+               BR_MOTOR.setPower(backRightPower);
+           } else {
+               // do auto aiming
+           }
+               LAUNCHER.setVelocity(launchPower);
             //Sets power to feeding servos.
             if (gamepad1.right_trigger > 0.1) {
                 feeder = 1;
@@ -215,5 +237,52 @@ public class onmiDrive extends LinearOpMode {
         backLeftPower = gamepad1.a ? 1 : 0;
         frontRightPower = gamepad1.y ? 1 : 0;
         backRightPower = gamepad1.b ? 1 : 0;
+    }
+    private void processDriveInputs() {
+        turn = turn * maxDrivePower;
+        forward = forward * maxDrivePower;
+        strafe = strafe * maxDrivePower;
+        // Combine inputs to create drive and turn (or both)
+        FL_MOTOR.setPower(forward + turn + strafe);
+        FR_MOTOR.setPower((forward - turn) - strafe);
+        BL_MOTOR.setPower((forward + turn) - strafe);
+        BR_MOTOR.setPower((forward - turn) + strafe);
+    }
+    private void processInputsAndSleep(int duration) {
+        // "This makes the code cleaner"??
+        processDriveInputs();
+        sleep(duration);
+        // Stop all movement after sleep
+        turn = 0;
+        forward = 0;
+        strafe = 0;
+        processDriveInputs();
+    }
+    public void aim() {
+        maxDrivePower = .15;
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        limelight.updateRobotOrientation(orientation.getYaw());
+        LLResult llResult = limelight.getLatestResult();
+        telemetry.addData("TagFound",llResult != null && llResult.isValid());
+        telemetry.update();
+        if (llResult != null && llResult.isValid()) {
+//            Pose3D botPose = llResult.getBotpose_MT2();
+            double y = llResult.getTy();
+            while (y < -3 || y > 3) {
+                telemetry.addData("Ty", y);
+                telemetry.update();
+                turn = (y > 0) ? -1 : 1;
+                processInputsAndSleep(100);
+                orientation = imu.getRobotYawPitchRollAngles();
+                limelight.updateRobotOrientation(orientation.getYaw());
+                llResult = limelight.getLatestResult();
+                y = llResult.getTy();
+            }
+        }
+        maxDrivePower = 1;
+        // getLimelightData
+        //getTyData
+        //move y to range (during shooting and going to loading)
+
     }
 }
