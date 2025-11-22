@@ -102,7 +102,7 @@ public class AutoRed extends LinearOpMode {
     /**
      * Describe this function...
      */
-    private void prosessInputsAndSleep(int duration) {
+    private void processInputsAndSleep(int duration) {
         // "This makes the code cleaner"??
         processDriveInputs();
         sleep(duration);
@@ -158,7 +158,7 @@ public class AutoRed extends LinearOpMode {
 
     private void leave() {
         forward = 1;
-        prosessInputsAndSleep(290);
+        processInputsAndSleep(290);
     }
 
     /**
@@ -166,9 +166,9 @@ public class AutoRed extends LinearOpMode {
      */
     private void driveToGoal() {
         forward = 1;
-        prosessInputsAndSleep(1200);
+        processInputsAndSleep(1200);
         turn = -1;
-        prosessInputsAndSleep(280);
+        processInputsAndSleep(280);
         sleep(500);
         aim();
         telemetry.addData("aim","firsty");
@@ -184,11 +184,11 @@ public class AutoRed extends LinearOpMode {
      */
     private void driveToPlayerStationAndBack() {
         forward = 1;
-        prosessInputsAndSleep(590);
+        processInputsAndSleep(590);
         LAUNCHER.setPower(ShootPower);
         sleep(2700);
         forward = -1;
-        prosessInputsAndSleep(630);
+        processInputsAndSleep(630);
         aim();
     }
 
@@ -206,7 +206,7 @@ public class AutoRed extends LinearOpMode {
                 telemetry.addData("Ty", y);
                 telemetry.update();
                 turn = (y > 0) ? -1 : 1;
-                prosessInputsAndSleep(100);
+                processInputsAndSleep(100);
                 orientation = imu.getRobotYawPitchRollAngles();
                 limelight.updateRobotOrientation(orientation.getYaw());
                 llResult = limelight.getLatestResult();
