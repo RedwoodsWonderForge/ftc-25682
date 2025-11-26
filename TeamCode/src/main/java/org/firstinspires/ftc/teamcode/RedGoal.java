@@ -6,8 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name = "RedGoal")
 public class RedGoal extends LinearOpMode {
-
-
     private DcMotor FL_MOTOR;
     private DcMotor FR_MOTOR;
     private DcMotor BL_MOTOR;
@@ -91,7 +89,7 @@ public class RedGoal extends LinearOpMode {
      */
     private void backward() {
         forward = -1;
-        prosessInputsAndSleep(1200);
+        prosessInputsAndSleep(400);
     }
     private void turn() {
         turn = -1;
