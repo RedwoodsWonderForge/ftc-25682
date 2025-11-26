@@ -25,6 +25,7 @@ public class BlueGoal extends LinearOpMode {
         FR_MOTOR = hardwareMap.get(DcMotor.class, "FR_MOTOR");
         BL_MOTOR = hardwareMap.get(DcMotor.class, "BL_MOTOR");
         BR_MOTOR = hardwareMap.get(DcMotor.class, "BR_MOTOR");
+
         String direction = "cw";
         leaveGoal = new LeaveGoal(FL_MOTOR, FR_MOTOR, BL_MOTOR, BR_MOTOR, direction);
         leaveGoal.initalSetup();
