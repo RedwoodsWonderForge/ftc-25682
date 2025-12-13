@@ -45,9 +45,8 @@ public class RedGoal extends LinearOpMode {
         leaveGoal.initalSetup();
         waitForStart();
         shootUtil.prepareMotor();
-        shootUtil.sleep(1000);
-        shootUtil.shootThreeArtifacts();
         shootUtil.sleep(15000);
+        shootUtil.shootThreeArtifacts();
         leaveGoal.autoDrive();
     }
 
