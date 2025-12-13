@@ -201,6 +201,8 @@ public class onmiDrive extends LinearOpMode {
             deflecRight.setPosition(deflecPos);
             axial = gamepad1.left_stick_y/fineAim;
             lateral = gamepad1.left_stick_x/fineAim;
+
+            //if( auto = true ) {get limelight} else {use right stick x} 
             yaw = gamepad1.right_stick_x/fineAim;
 
             frontLeftPower = axial + lateral + yaw;
