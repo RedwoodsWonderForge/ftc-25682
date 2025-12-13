@@ -13,13 +13,13 @@ public class Shoot {
         FeederRight = fRight;
         FeederLeft = fLeft;
         Launcher = launchMotor;
-        ShootPower = .65;
+        ShootPower = .45;
     }
     private void feedShooter() {
         IsShooting = true;
         FeederRight.setPower(-1);
         FeederLeft.setPower(1);
-        sleep(750);
+        sleep(900);
         FeederRight.setPower(0);
         FeederLeft.setPower(0);
         IsShooting = false;
@@ -32,6 +32,7 @@ public class Shoot {
             if (!IsShooting) {
                 feedShooter();
                 NArtifacts += -1;
+                sleep(500);
             }
         }
         Launcher.setPower(0);

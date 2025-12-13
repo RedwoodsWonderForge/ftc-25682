@@ -133,13 +133,13 @@ public class onmiDrive extends LinearOpMode {
             if(gamepad1.y){
                 yPressed = true;
             } if (!gamepad1.y && yPressed){
-                counter = counter+10;
+                counter +=2.5; //was 10
                 yPressed = false;
             }
             if(gamepad1.a){
                 aPressed = true;
             } if (!gamepad1.a && aPressed){
-                counter = counter-10;
+                counter -=2.5; //was 10
                 aPressed = false;
             }
             if(gamepad1.x){
@@ -161,7 +161,7 @@ public class onmiDrive extends LinearOpMode {
 
 
             if (gamepad1.left_bumper) {
-                launchPower = counter*21;
+                launchPower = counter*30; //was first 30 then 21
             } else launchPower = gamepad1.left_trigger;
 
             if (launchPower > 0.1) {
@@ -245,7 +245,7 @@ public class onmiDrive extends LinearOpMode {
      */
     private void initalSetup() {
         limelight = hardwareMap.get(Limelight3A.class, "Limelight");
-        limelight.pipelineSwitch(0);
+        limelight.pipelineSwitch(2);
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
@@ -273,8 +273,8 @@ public class onmiDrive extends LinearOpMode {
         sleep(duration);
         // Stop all movement after sleep
         turn = 0;
-        forward = 0;
-        strafe = 0;
+        //forward = 0;
+        //strafe = 0;
         processDriveInputs();
     }
     public void aim() {

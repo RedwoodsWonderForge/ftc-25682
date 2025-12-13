@@ -77,7 +77,7 @@ public class LeaveGoal{
      * Describe this function...
      */
     private void backward() {
-        forward = -1;
+        forward = 1;
         prosessInputsAndSleep(400);
     }
     private void turn() {
