@@ -52,6 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Robot: Teleop Tank", group="Robot")
+@Disabled
 
 public class TestDrive extends OpMode{
 
