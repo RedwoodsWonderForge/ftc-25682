@@ -161,8 +161,8 @@ public class omniDriveRed extends LinearOpMode {
 
 
             if (gamepad1.left_bumper) {
-                launchPower = counter*30; //was first 30 then 21
-            } else launchPower = gamepad1.left_trigger;
+                launchPower = counter*21; //was first 30 then 21
+            } else launchPower = gamepad1.left_trigger*21;
 
             if (launchPower > 0.1) {
                 fineAim = 3;
