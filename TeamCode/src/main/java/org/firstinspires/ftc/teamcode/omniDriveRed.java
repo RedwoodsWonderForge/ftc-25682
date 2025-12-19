@@ -14,8 +14,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@TeleOp(name = "omniDrive")
-public class onmiDrive extends LinearOpMode {
+@TeleOp(name = "omniDriveRed")
+public class omniDriveRed extends LinearOpMode {
 
     private DcMotor FL_MOTOR;
     private DcMotor BL_MOTOR;
@@ -133,13 +133,13 @@ public class onmiDrive extends LinearOpMode {
             if(gamepad1.y){
                 yPressed = true;
             } if (!gamepad1.y && yPressed){
-                counter +=2.5; //was 10
+                counter ++; //was 10
                 yPressed = false;
             }
             if(gamepad1.a){
                 aPressed = true;
             } if (!gamepad1.a && aPressed){
-                counter -=2.5; //was 10
+                counter --; //was 10
                 aPressed = false;
             }
             if(gamepad1.x){
@@ -169,18 +169,18 @@ public class onmiDrive extends LinearOpMode {
             } else fineAim = 1;
 
             // Send calculated power to wheels and launcher.
-           if (gamepad1.x) {
-               // do auto aiming
-               aim();
+            if (gamepad1.x) {
+                // do auto aiming
+                aim();
 //               aimMode = false;
-           } else {
+            } else {
 
-               FL_MOTOR.setPower(frontLeftPower);
-               FR_MOTOR.setPower(frontRightPower);
-               BL_MOTOR.setPower(backLeftPower);
-               BR_MOTOR.setPower(backRightPower);
-           }
-               LAUNCHER.setVelocity(launchPower);
+                FL_MOTOR.setPower(frontLeftPower);
+                FR_MOTOR.setPower(frontRightPower);
+                BL_MOTOR.setPower(backLeftPower);
+                BR_MOTOR.setPower(backRightPower);
+            }
+            LAUNCHER.setVelocity(launchPower);
             //Sets power to feeding servos.
             if (gamepad1.right_trigger > 0.1) {
                 feeder = 1;
@@ -197,12 +197,15 @@ public class onmiDrive extends LinearOpMode {
             if (gamepad1.dpad_right){
                 deflecPos = 0.2;
             }
+            if (gamepad1.dpad_up){
+                deflecPos = 0.26;
+            }
             deflecLeft.setPosition(deflecPos+0.42);
             deflecRight.setPosition(deflecPos);
             axial = gamepad1.left_stick_y/fineAim;
             lateral = gamepad1.left_stick_x/fineAim;
 
-            //if( auto = true ) {get limelight} else {use right stick x} 
+            //if( auto = true ) {get limelight} else {use right stick x}
             yaw = gamepad1.right_stick_x/fineAim;
 
             frontLeftPower = axial + lateral + yaw;
@@ -247,7 +250,7 @@ public class onmiDrive extends LinearOpMode {
      */
     private void initalSetup() {
         limelight = hardwareMap.get(Limelight3A.class, "Limelight");
-        limelight.pipelineSwitch(2);
+        limelight.pipelineSwitch(0);
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
