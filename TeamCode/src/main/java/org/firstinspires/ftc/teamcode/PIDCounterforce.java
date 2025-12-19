@@ -12,8 +12,12 @@ public class PIDCounterforce {
     private double errorSum = 0.0;
     private double lastError = 0.0;
 
-    public PIDCounterforce(DcMotor motor) {
+    public PIDCounterforce(DcMotor motor, double kp, double ki, double kd) {
         this.motor = motor;
+        this.kp = kp;
+        this.ki = ki;
+        this.kd = kd;
+
     }
 
     public void setSetPoint(double setPoint) {
