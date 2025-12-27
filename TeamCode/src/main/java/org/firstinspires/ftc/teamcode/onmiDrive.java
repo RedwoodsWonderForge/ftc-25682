@@ -253,22 +253,22 @@ public class onmiDrive extends LinearOpMode {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
         imu.initialize(new IMU.Parameters(revHubOrientationOnRobot));
     }
-    private void testMotorDirections() {
-        frontLeftPower = gamepad1.x ? 1 : 0;
-        backLeftPower = gamepad1.a ? 1 : 0;
-        frontRightPower = gamepad1.y ? 1 : 0;
-        backRightPower = gamepad1.b ? 1 : 0;
+//    private void testMotorDirections() {
+//        frontLeftPower = gamepad1.x ? 1 : 0;
+//        backLeftPower = gamepad1.a ? 1 : 0;
+//        frontRightPower = gamepad1.y ? 1 : 0;
+//        backRightPower = gamepad1.b ? 1 : 0;
     }
-    private void processDriveInputs() {
-        turn = turn * maxDrivePower;
-        forward = forward * maxDrivePower;
-        strafe = strafe * maxDrivePower;
-        // Combine inputs to create drive and turn (or both)
-        FL_MOTOR.setPower(forward + turn + strafe);
-        FR_MOTOR.setPower((forward - turn) - strafe);
-        BL_MOTOR.setPower((forward + turn) - strafe);
-        BR_MOTOR.setPower((forward - turn) + strafe);
-    }
+//    private void processDriveInputs() {
+//        turn = turn * maxDrivePower;
+//        forward = forward * maxDrivePower;
+//        strafe = strafe * maxDrivePower;
+//        // Combine inputs to create drive and turn (or both)
+//        FL_MOTOR.setPower(forward + turn + strafe);
+//        FR_MOTOR.setPower((forward - turn) - strafe);
+//        BL_MOTOR.setPower((forward + turn) - strafe);
+//        BR_MOTOR.setPower((forward - turn) + strafe);
+//    }
     private void processInputsAndSleep(int duration) {
         // "This makes the code cleaner"??
         processDriveInputs();
