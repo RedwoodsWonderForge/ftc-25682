@@ -70,12 +70,12 @@ public class omniDrive extends LinearOpMode {
         boolean xPressed = false;
         boolean aimMode;
 
-
         FL_MOTOR = hardwareMap.get(DcMotor.class, "FL_MOTOR");
         BL_MOTOR = hardwareMap.get(DcMotor.class, "BL_MOTOR");
         FR_MOTOR = hardwareMap.get(DcMotor.class, "FR_MOTOR");
         BR_MOTOR = hardwareMap.get(DcMotor.class, "BR_MOTOR");
         LAUNCHER = hardwareMap.get(DcMotorEx.class, "LAUNCHER");
+        launchPID = new PIDCounterforce(LAUNCHER,1,0,0);
 
         LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
@@ -175,12 +175,23 @@ public class omniDrive extends LinearOpMode {
 //               aimMode = false;
             } else {
 
+<<<<<<< Updated upstream:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/omniDrive.java
                 FL_MOTOR.setPower(frontLeftPower);
                 FR_MOTOR.setPower(frontRightPower);
                 BL_MOTOR.setPower(backLeftPower);
                 BR_MOTOR.setPower(backRightPower);
             }
             LAUNCHER.setVelocity(launchPower);
+=======
+               FL_MOTOR.setPower(frontLeftPower);
+               FR_MOTOR.setPower(frontRightPower);
+               BL_MOTOR.setPower(backLeftPower);
+               BR_MOTOR.setPower(backRightPower);
+           }
+           launchPID.setSetPoint(launchPower);
+           launchPID.update();
+//           LAUNCHER.setVelocity(launchPower);
+>>>>>>> Stashed changes:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/onmiDrive.java
             //Sets power to feeding servos.
             if (gamepad1.right_trigger > 0.1) {
                 feeder = 1;
