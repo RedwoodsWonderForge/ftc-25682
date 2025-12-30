@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+
+
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -171,7 +173,7 @@ public class omniDriveRed extends LinearOpMode {
             // Send calculated power to wheels and launcher.
             if (gamepad1.x) {
                 // do auto aiming
-                aim();
+              //  aim();
 //               aimMode = false;
             } else {
 
@@ -272,39 +274,6 @@ public class omniDriveRed extends LinearOpMode {
 //        BL_MOTOR.setPower((forward + turn) - strafe);
 //        BR_MOTOR.setPower((forward - turn) + strafe);
 //    }
-    private void processInputsAndSleep(int duration) {
-        // "This makes the code cleaner"??
-        processDriveInputs();
-        sleep(duration);
-        // Stop all movement after sleep
-        turn = 0;
-        //forward = 0;
-        //strafe = 0;
-        processDriveInputs();
-    }
-    public void aim() {
-        maxDrivePower = .15;
-        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        limelight.updateRobotOrientation(orientation.getYaw());
-        LLResult llResult = limelight.getLatestResult();
-        telemetry.addData("TagFound",llResult != null && llResult.isValid());
-        if (llResult != null && llResult.isValid()) {
-//            Pose3D botPose = llResult.getBotpose_MT2();
-            double y = llResult.getTy();
-            while (y < -3 || y > 3) {
-                telemetry.addData("Ty", y);
-                turn = (y > 0) ? -1 : 1;
-                processInputsAndSleep(100);
-                orientation = imu.getRobotYawPitchRollAngles();
-                limelight.updateRobotOrientation(orientation.getYaw());
-                llResult = limelight.getLatestResult();
-                y = llResult.getTy();
-            }
-        }
-        maxDrivePower = 1;
-        // getLimelightData
-        //getTyData
-        //move y to range (during shooting and going to loading)
 
-    }
-}
+
+
