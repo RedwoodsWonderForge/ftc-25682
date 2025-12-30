@@ -16,8 +16,8 @@ public class Aim {
         Limelight = limelight;
         Imu = imu;
     }
-    public float recalcualateYaw(float oldYaw){
-        float newYaw;
+    public double recalcualateYaw(double oldYaw){
+        double newYaw;
         return refreshPosition() * MAX_DRIVE_POWER;
 
     }
