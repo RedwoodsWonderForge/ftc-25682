@@ -7,18 +7,17 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-public class Aim {
+public class AimController {
     private Limelight3A Limelight;
     private IMU Imu;
     private double MAX_DRIVE_POWER = .15;
     //CONSTRUCTOR
-    public Aim(Limelight3A limelight, IMU imu){
+    public AimController(Limelight3A limelight, IMU imu){
         Limelight = limelight;
         Imu = imu;
     }
-    public float recalcualateYaw(float oldYaw){
-        float newYaw;
-        return refreshPosition() * MAX_DRIVE_POWER;
+    public double recalcualateYaw(){
+        return refreshPosition() * MAX_DRIVE_POWER /20;
 
     }
     public void start(){
