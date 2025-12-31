@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class PIDCounterforce {
-    private DcMotor motor;
+    private DcMotorEx motor;
     private double setPoint = 0.0; // Desired position or velocity
     private double kp = 0.1; // Proportional gain
     private double ki = 0.01; // Integral gain
@@ -12,7 +13,7 @@ public class PIDCounterforce {
     private double errorSum = 0.0;
     private double lastError = 0.0;
 
-    public PIDCounterforce(DcMotor motor, double kp, double ki, double kd) {
+    public PIDCounterforce(DcMotorEx motor, double kp, double ki, double kd) {
         this.motor = motor;
         this.kp = kp;
         this.ki = ki;
@@ -26,7 +27,7 @@ public class PIDCounterforce {
 
     public void update() {
         // Assuming you have a way to measure the current position or velocity
-        double currentPosition = motor.getCurrentPosition(); // Or current velocity
+        double currentPosition = motor.getVelocity(); // Or current velocity
 
         // Calculate error
         double error = setPoint - currentPosition;

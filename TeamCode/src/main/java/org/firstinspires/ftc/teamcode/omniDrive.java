@@ -6,6 +6,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -85,9 +86,10 @@ public class omniDrive extends LinearOpMode {
         FR_MOTOR = hardwareMap.get(DcMotor.class, "FR_MOTOR");
         BR_MOTOR = hardwareMap.get(DcMotor.class, "BR_MOTOR");
         LAUNCHER = hardwareMap.get(DcMotorEx.class, "LAUNCHER");
-        PIDCounterforce launchPID = new PIDCounterforce(LAUNCHER,1,0,0);
 
-        LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        PIDCounterforce launchPID = new PIDCounterforce(LAUNCHER, 0.01, 0, 0);
+
+        //LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         LEFT = hardwareMap.get(CRServo.class, "LEFT");
         RIGHT = hardwareMap.get(CRServo.class, "RIGHT");
@@ -112,8 +114,8 @@ public class omniDrive extends LinearOpMode {
         // <--- Click blue icon to see important note re. testing motor directions.
         FL_MOTOR.setDirection(DcMotor.Direction.FORWARD);
         BL_MOTOR.setDirection(DcMotor.Direction.FORWARD);
-        FR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
-        BR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
+        FR_MOTOR.setDirection(DcMotor.Direction.REVERSE);
+        BR_MOTOR.setDirection(DcMotor.Direction.REVERSE);
         LAUNCHER.setDirection(DcMotorEx.Direction.FORWARD);
 
         deflecLeft.setDirection(Servo.Direction.REVERSE);
