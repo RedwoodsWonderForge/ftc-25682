@@ -78,7 +78,7 @@ public class omniDrive extends LinearOpMode {
         LAUNCHER = hardwareMap.get(DcMotorEx.class, "LAUNCHER");
         PIDCounterforce launchPID = new PIDCounterforce(LAUNCHER, 0.01, 0, 0);
 
-        LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        //LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         LEFT = hardwareMap.get(CRServo.class, "LEFT");
         RIGHT = hardwareMap.get(CRServo.class, "RIGHT");
