@@ -221,8 +221,8 @@ public class omniDrive extends LinearOpMode {
             }
             deflecLeft.setPosition(deflecPos+0.42);
             deflecRight.setPosition(deflecPos);
-            axial = gamepad1.left_stick_y/fineAim;
-            lateral = gamepad1.left_stick_x/fineAim;
+            axial = gamepad1.left_stick_y;
+            lateral = gamepad1.left_stick_x;
 
             //if( auto = true ) {get limelight} else {use right stick x} 
             yaw = gamepad1.x ? aimController.recalcualateYaw(): gamepad1.right_stick_x/fineAim;
@@ -253,10 +253,9 @@ public class omniDrive extends LinearOpMode {
             telemetry.addData("Back  left/Right", JavaUtil.formatNumber(backLeftPower, 4, 2) + ", " + JavaUtil.formatNumber(backRightPower, 4, 2));
             telemetry.addData("Left Trigger" , counter + " ");
             telemetry.addData("Feeder" , feeder + " ");
-            telemetry.addData("Current launch power" ,  launchPower/22 + " ");
-            telemetry.addData("LimeLight Ta (range)" , aimController.remapRange(aimController.refreshPosition()[0],2.7,0.3,50.0,90.0) + " ");
-            //telemetry.addData("LimeLight Ta (range)" , aimController.refreshPosition()[0] + " ");
-            telemetry.addData("LimeLight Tx (deviation)" , aimController.refreshPosition()[1] + " ");
+            telemetry.addData("Feeder" , feeder + " ");
+            telemetry.addData("LimeLight range" , aimController.refreshPosition()[0] + " ");
+            telemetry.addData("LimeLight deviation " , aimController.refreshPosition()[1] + " ");
             telemetry.addData("LimeLight Active", aimMode);
             telemetry.update();
         }
