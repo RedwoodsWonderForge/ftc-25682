@@ -214,8 +214,8 @@ public class omniDrive extends LinearOpMode {
             }
             deflecLeft.setPosition(deflecPos+0.42);
             deflecRight.setPosition(deflecPos);
-            axial = gamepad1.left_stick_y/fineAim;
-            lateral = gamepad1.left_stick_x/fineAim;
+            axial = gamepad1.left_stick_y;
+            lateral = gamepad1.left_stick_x;
 
             //if( auto = true ) {get limelight} else {use right stick x} 
             yaw = gamepad1.x ? aimController.recalcualateYaw(): gamepad1.right_stick_x/fineAim;
