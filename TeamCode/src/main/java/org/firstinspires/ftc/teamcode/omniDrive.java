@@ -76,6 +76,7 @@ public class omniDrive extends LinearOpMode {
         double yaw;
         double deflecPos = 0.3;
         double max;
+        double[] solution;
         boolean yPressed = false;
         boolean aPressed = false;
         boolean xPressed = false;
@@ -173,7 +174,7 @@ public class omniDrive extends LinearOpMode {
 
 
             if (gamepad1.left_bumper) {
-                launchPower = counter*21; //was first 30 then 21
+                launchPower = counter*22; //was first 30 then 21
             } else launchPower = gamepad1.left_trigger;
 
             if (launchPower > 0.1) {
@@ -183,6 +184,9 @@ public class omniDrive extends LinearOpMode {
             // Send calculated power to wheels and launcher.
             if (gamepad1.x) {
                 aimController.refreshPosition();
+               solution = aimController.fireControlSolution();
+               launchPower = solution[0];
+               deflecPos = solution[1];
                 // do auto aiming
             }
            launchPID.setSetPoint(launchPower);
@@ -210,8 +214,8 @@ public class omniDrive extends LinearOpMode {
             }
             deflecLeft.setPosition(deflecPos+0.42);
             deflecRight.setPosition(deflecPos);
-            axial = gamepad1.left_stick_y/fineAim;
-            lateral = gamepad1.left_stick_x/fineAim;
+            axial = gamepad1.left_stick_y;
+            lateral = gamepad1.left_stick_x;
 
             //if( auto = true ) {get limelight} else {use right stick x} 
             yaw = gamepad1.x ? aimController.recalcualateYaw(): gamepad1.right_stick_x/fineAim;
@@ -240,10 +244,11 @@ public class omniDrive extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime);
             telemetry.addData("Front left/Right", JavaUtil.formatNumber(frontLeftPower, 4, 2) + ", " + JavaUtil.formatNumber(frontRightPower, 4, 2));
             telemetry.addData("Back  left/Right", JavaUtil.formatNumber(backLeftPower, 4, 2) + ", " + JavaUtil.formatNumber(backRightPower, 4, 2));
-            telemetry.addData("Left Trigger" , launchPower + " ");
+            telemetry.addData("Left Trigger" , counter + " ");
             telemetry.addData("Feeder" , feeder + " ");
             telemetry.addData("Feeder" , feeder + " ");
-            telemetry.addData("testing" , testing + " ");
+            telemetry.addData("LimeLight range" , aimController.refreshPosition()[0] + " ");
+            telemetry.addData("LimeLight deviation " , aimController.refreshPosition()[1] + " ");
             telemetry.addData("LimeLight Active", aimMode);
             telemetry.update();
         }
