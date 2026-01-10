@@ -16,9 +16,8 @@ public class AimController {
         Limelight = limelight;
         Imu = imu;
     }
-    public double recalcualateYaw(double oldYaw){
-        double newYaw;
-        return refreshPosition() * MAX_DRIVE_POWER;
+    public double recalcualateYaw(){
+        return refreshPosition()[1] * MAX_DRIVE_POWER /15;
 
     }
     public void start(){
@@ -31,18 +30,30 @@ public class AimController {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
         Imu.initialize(new IMU.Parameters(revHubOrientationOnRobot));
     }
-    public double refreshPosition() {
+    public double[] refreshPosition() {
         YawPitchRollAngles orientation = Imu.getRobotYawPitchRollAngles();
         Limelight.updateRobotOrientation(orientation.getYaw());
         LLResult llResult = Limelight.getLatestResult();
         if (llResult != null && llResult.isValid()) {
 //            Pose3D botPose = llResult.getBotpose_MT2();
-            return llResult.getTy();
+            return new double[] {llResult.getTa(), llResult.getTx()};
         }
         // getLimelightData
-        //getTyData
+        //getTData
         //move y to range (during shooting and going to loading)
 
-        return 0;
+        return new double[] {0,0};
+    }
+
+    public double[] fireControlSolution() {
+        double deflectAngle;
+        double motorPower;
+         if (refreshPosition()[0] < 4.0){
+              motorPower = 90;
+              deflectAngle = 0.16;
+         } else {motorPower = 0; deflectAngle = 0.3;}
+
+
+        return new double[] {motorPower,deflectAngle};
     }
 }
