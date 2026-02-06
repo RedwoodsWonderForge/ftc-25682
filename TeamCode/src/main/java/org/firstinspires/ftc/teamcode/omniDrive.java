@@ -252,7 +252,8 @@ public class omniDrive extends LinearOpMode {
             telemetry.addData("Left Trigger" , counter + " ");
             telemetry.addData("Feeder" , feeder + " ");
             telemetry.addData("Current launch power" ,  launchPower/22 + " ");
-            telemetry.addData("LimeLight Ta (range)" , aimController.remapRange(aimController.refreshPosition()[0],2.7,0.25,50.0,80.0) + " ");
+            telemetry.addData("LimeLight Ta (range)" , aimController.remapRange(aimController.refreshPosition()[0],2.7,0.21,50.0,80.0) + " ");
+            telemetry.addData("LimeLight Ta (range)" , aimController.refreshPosition()[0] + " ");
             //telemetry.addData("LimeLight Ta (range)" , aimController.refreshPosition()[0] + " ");
             telemetry.addData("LimeLight Tx (deviation)" , aimController.refreshPosition()[1] + " ");
             telemetry.addData("LimeLight Active", aimMode);

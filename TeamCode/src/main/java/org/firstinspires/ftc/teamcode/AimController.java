@@ -46,12 +46,18 @@ public class AimController {
     }
 
     public double[] fireControlSolution() {
-        double deflectAngle;
-        double motorPower;
+        double deflectAngle = 0;
+        double motorPower = 0;
         double[] pos = refreshPosition();
          if (pos[0] < 4.0 && pos[0] > 0){
-             motorPower = 22*remapRange((pos[0]),2.7,0.25,50.0,80.0);
-             deflectAngle = remapRange((pos[0]),2.7,0.25,0.97,0.5);
+            if(pos[0] < .6 ){
+                motorPower = 22*remapRange((pos[0]),0.65,0.21,70.0,80.0);
+            }
+            else {
+                motorPower = 22*remapRange((pos[0]),2.7,0.65,50.0,70.0);
+            }
+
+             deflectAngle = remapRange((pos[0]),2.7,0.21,0.97,0.5);
          } else {motorPower = 0; deflectAngle = 0.97;}
 
 
