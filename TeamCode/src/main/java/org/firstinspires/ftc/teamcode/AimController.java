@@ -17,7 +17,7 @@ public class AimController {
         Imu = imu;
     }
     public double recalcualateYaw(){
-        return refreshPosition()[1] * MAX_DRIVE_POWER /15;
+        return ((refreshPosition()[1] * 3) * MAX_DRIVE_POWER) /- 15;
 
     }
     public void start(){
@@ -48,10 +48,11 @@ public class AimController {
     public double[] fireControlSolution() {
         double deflectAngle;
         double motorPower;
-         if (refreshPosition()[0] < 4.0){
-              motorPower = 90;
-              deflectAngle = 0.16;
-         } else {motorPower = 0; deflectAngle = 0.3;}
+        double[] pos = refreshPosition();
+         if (pos[0] < 4.0 && pos[0] > 0){
+             motorPower = 22*remapRange((pos[0]),2.7,0.25,50.0,80.0);
+             deflectAngle = remapRange((pos[0]),2.7,0.25,0.97,0.5);
+         } else {motorPower = 0; deflectAngle = 0.97;}
 
 
         return new double[] {motorPower,deflectAngle};
