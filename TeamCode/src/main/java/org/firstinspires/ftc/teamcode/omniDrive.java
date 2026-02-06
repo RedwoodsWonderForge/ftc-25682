@@ -22,9 +22,10 @@ public class omniDrive extends LinearOpMode {
     private DcMotor BL_MOTOR;
     private DcMotor FR_MOTOR;
     private DcMotor BR_MOTOR;
-    private DcMotorEx LAUNCHER;
-    public Servo deflecRight;
-    public Servo deflecLeft;
+    private DcMotor INTAKE;
+    private DcMotorEx launcherOne;
+    private DcMotorEx launcherTwo;
+    public Servo Deflector;
     public CRServo LEFT;
     public CRServo RIGHT;
     private Limelight3A limelight;
@@ -74,7 +75,7 @@ public class omniDrive extends LinearOpMode {
         double axial;
         double lateral;
         double yaw;
-        double deflecPos = 0.3;
+        double deflecPos = 0.97;
         double max;
         double[] solution;
         boolean yPressed = false;
@@ -86,16 +87,17 @@ public class omniDrive extends LinearOpMode {
         BL_MOTOR = hardwareMap.get(DcMotor.class, "BL_MOTOR");
         FR_MOTOR = hardwareMap.get(DcMotor.class, "FR_MOTOR");
         BR_MOTOR = hardwareMap.get(DcMotor.class, "BR_MOTOR");
-        LAUNCHER = hardwareMap.get(DcMotorEx.class, "LAUNCHER");
+        INTAKE = hardwareMap.get(DcMotor.class, "INTAKE");
+        launcherTwo = hardwareMap.get(DcMotorEx.class, "LAUNCHER_2");
+        launcherOne = hardwareMap.get(DcMotorEx.class, "LAUNCHER_1");
 
-        PIDCounterforce launchPID = new PIDCounterforce(LAUNCHER, 0.01, 0, 0);
-
+        PIDCounterforce launchPIDOne = new PIDCounterforce(launcherOne, 0.01, 0, 0);
+        PIDCounterforce launchPIDTwo = new PIDCounterforce(launcherTwo, 0.01, 0, 0);
         //LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        LEFT = hardwareMap.get(CRServo.class, "LEFT");
-        RIGHT = hardwareMap.get(CRServo.class, "RIGHT");
-        deflecRight = hardwareMap.get(Servo.class, "deflecRight");
-        deflecLeft = hardwareMap.get(Servo.class, "deflecLeft");
+        LEFT = hardwareMap.get(CRServo.class, "Feeder_Left");
+        RIGHT = hardwareMap.get(CRServo.class, "Feeder_Right");
+        Deflector = hardwareMap.get(Servo.class, "Deflector");
         runtime = new ElapsedTime();
 
         // ########################################################################################
@@ -115,11 +117,10 @@ public class omniDrive extends LinearOpMode {
         // <--- Click blue icon to see important note re. testing motor directions.
         FL_MOTOR.setDirection(DcMotor.Direction.FORWARD);
         BL_MOTOR.setDirection(DcMotor.Direction.FORWARD);
-        FR_MOTOR.setDirection(DcMotor.Direction.REVERSE);
-        BR_MOTOR.setDirection(DcMotor.Direction.REVERSE);
-        LAUNCHER.setDirection(DcMotorEx.Direction.FORWARD);
+        FR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
+        BR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
+        launcherOne.setDirection(DcMotorEx.Direction.REVERSE);
 
-        deflecLeft.setDirection(Servo.Direction.REVERSE);
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
 
@@ -189,36 +190,40 @@ public class omniDrive extends LinearOpMode {
                deflecPos = solution[1];
                 // do auto aiming
             }
-           launchPID.setSetPoint(launchPower);
-           launchPID.update();
+           launchPIDOne.setSetPoint(launchPower);
+           launchPIDOne.update();
+           launchPIDTwo.setSetPoint(launchPower);
+           launchPIDTwo.update();
 //           LAUNCHER.setVelocity(launchPower);
 
             //Sets power to feeding servos.
             if (gamepad1.right_trigger > 0.1) {
                 feeder = 1;
             } else feeder = 0;
+            if (gamepad1.right_bumper){
+                INTAKE.setPower(1);
+            } else {INTAKE.setPower(0);}
             LEFT.setPower(feeder);
             RIGHT.setPower(feeder*-1);
 
             if (gamepad1.dpad_down){
-                deflecPos = 0.16;
+                deflecPos = 0.5;
             }
             if (gamepad1.dpad_left){
-                deflecPos = 0.3;
+                deflecPos = 0.8;
             }
             if (gamepad1.dpad_right){
-                deflecPos = 0.2;
+                deflecPos = 0.9;
             }
             if (gamepad1.dpad_up){
-                deflecPos = 0.26;
+                deflecPos = 0.97;
             }
-            deflecLeft.setPosition(deflecPos+0.42);
-            deflecRight.setPosition(deflecPos);
+            Deflector.setPosition(deflecPos);
             axial = gamepad1.left_stick_y;
-            lateral = gamepad1.left_stick_x;
+            lateral = -gamepad1.left_stick_x;
 
             //if( auto = true ) {get limelight} else {use right stick x} 
-            yaw = gamepad1.x ? aimController.recalcualateYaw(): gamepad1.right_stick_x/fineAim;
+            yaw = gamepad1.x ? aimController.recalcualateYaw(): -gamepad1.right_stick_x/fineAim;
 
             frontLeftPower = axial + lateral + yaw;
             frontRightPower = (axial - lateral) - yaw;
@@ -247,7 +252,7 @@ public class omniDrive extends LinearOpMode {
             telemetry.addData("Left Trigger" , counter + " ");
             telemetry.addData("Feeder" , feeder + " ");
             telemetry.addData("Current launch power" ,  launchPower/22 + " ");
-            telemetry.addData("LimeLight Ta (range)" , aimController.remapRange(aimController.refreshPosition()[0],2.7,0.3,50.0,90.0) + " ");
+            telemetry.addData("LimeLight Ta (range)" , aimController.remapRange(aimController.refreshPosition()[0],2.7,0.25,50.0,80.0) + " ");
             //telemetry.addData("LimeLight Ta (range)" , aimController.refreshPosition()[0] + " ");
             telemetry.addData("LimeLight Tx (deviation)" , aimController.refreshPosition()[1] + " ");
             telemetry.addData("LimeLight Active", aimMode);
