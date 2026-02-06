@@ -8,17 +8,22 @@ public class Shoot {
     private CRServo FeederRight;
     private CRServo FeederLeft;
     double ShootPower;
-    private DcMotor Launcher;
-    public Shoot (CRServo fLeft, CRServo fRight, DcMotor launchMotor){
+    private DcMotor Launcher_One;
+    private DcMotor Launcher_Two;
+    private DcMotor Intake;
+    public Shoot (CRServo fLeft, CRServo fRight, DcMotor launchMotor,DcMotor launchMotor_2, DcMotor intake){
         FeederRight = fRight;
         FeederLeft = fLeft;
-        Launcher = launchMotor;
+        this.Intake = intake;
+        Launcher_One = launchMotor;
+        Launcher_Two = launchMotor_2;
         ShootPower = .45;
     }
     private void feedShooter() {
         IsShooting = true;
         FeederRight.setPower(-1);
         FeederLeft.setPower(1);
+        Intake.setPower(1);
         sleep(900);
         FeederRight.setPower(0);
         FeederLeft.setPower(0);

@@ -76,12 +76,12 @@ public class LeaveGoal{
     /**
      * Describe this function...
      */
-    private void backward() {
+    public void backward() {
         forward = 1;
         prosessInputsAndSleep(400);
     }
-    private void turn() {
-        if (Direction == "CCW") {
+    public void turn(String direction) {
+        if (direction == "CCW") {
             turn = -1;
         } else {
             turn = 1;

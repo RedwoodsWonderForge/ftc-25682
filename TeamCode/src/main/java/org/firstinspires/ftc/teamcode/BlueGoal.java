@@ -16,28 +16,28 @@ public class BlueGoal extends LinearOpMode {
     private DcMotor BR_MOTOR;
     private CRServo RIGHT;
     private CRServo LEFT;
-    private Servo deflecLeft;
-    private DcMotor LAUNCHER;
-    private Servo deflecRight;
-    /**
-     * This sample contains the bare minimum Blocks for any regular OpMode. The 3 blue
-     * Comment Blocks show where to place Initialization code (runs once, after touching the
-     * DS INIT button, and before touching the DS Start arrow), Run code (runs once, after
-     * touching Start), and Loop code (runs repeatedly while the OpMode is active, namely not
-     * Stopped).
-     */
+    private Servo Deflector;
+    private DcMotor LAUNCHER_ONE;
+    private DcMotor LAUNCHER_TWO;
+    private DcMotor INTAKE;
+
     @Override
     public void runOpMode() {
-        deflecLeft = hardwareMap.get(Servo.class, "deflecLeft");
-        LAUNCHER = hardwareMap.get(DcMotor.class, "LAUNCHER");
-        deflecRight = hardwareMap.get(Servo.class, "deflecRight");
+        Deflector = hardwareMap.get(Servo.class, "Deflector");
+
+        LAUNCHER_ONE = hardwareMap.get(DcMotor.class, "LAUNCHER_ONE");
+        LAUNCHER_TWO = hardwareMap.get(DcMotor.class, "LAUNCHER_TWO");
+
+        INTAKE = hardwareMap.get(DcMotor.class, "INTAKE");
+
         FL_MOTOR = hardwareMap.get(DcMotor.class, "FL_MOTOR");
         FR_MOTOR = hardwareMap.get(DcMotor.class, "FR_MOTOR");
         BL_MOTOR = hardwareMap.get(DcMotor.class, "BL_MOTOR");
         BR_MOTOR = hardwareMap.get(DcMotor.class, "BR_MOTOR");
+
         RIGHT = hardwareMap.get(CRServo.class, "RIGHT");
         LEFT = hardwareMap.get(CRServo.class, "LEFT");
-        shootUtil = new Shoot(LEFT, RIGHT, LAUNCHER);
+        shootUtil = new Shoot(LEFT, RIGHT, LAUNCHER_ONE, LAUNCHER_TWO, INTAKE);
 
 
 
@@ -46,8 +46,10 @@ public class BlueGoal extends LinearOpMode {
         waitForStart();
         shootUtil.prepareMotor();
         shootUtil.sleep(15000);
+        leaveGoal.backward();
         shootUtil.shootThreeArtifacts();
-        leaveGoal.autoDrive();
+        leaveGoal.turn("CW");
+        leaveGoal.backward();
     }
 
 
