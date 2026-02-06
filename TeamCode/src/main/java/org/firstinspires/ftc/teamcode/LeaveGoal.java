@@ -35,7 +35,6 @@ public class LeaveGoal{
 
     }
 
-
     /**
      * Describe this function...
      */

@@ -44,7 +44,6 @@ public class Shoot {
         Launcher_Two.setPower(0);
     }
     public void prepareMotor(){
-
         Launcher_One.setPower(ShootPower);
         Launcher_Two.setPower(ShootPower);
     }
