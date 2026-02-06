@@ -35,14 +35,6 @@ public class LeaveGoal{
 
     }
 
-    /**
-     * Describe this function...
-     */
-    public void autoDrive() {
-        backward();
-        turn();
-        backward();
-    }
 
     /**
      * Describe this function...
