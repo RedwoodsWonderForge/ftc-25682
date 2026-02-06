@@ -25,8 +25,8 @@ public class RedGoal extends LinearOpMode {
     public void runOpMode() {
         Deflector = hardwareMap.get(Servo.class, "Deflector");
 
-        LAUNCHER_ONE = hardwareMap.get(DcMotor.class, "LAUNCHER_ONE");
-        LAUNCHER_TWO = hardwareMap.get(DcMotor.class, "LAUNCHER_TWO");
+        LAUNCHER_ONE = hardwareMap.get(DcMotor.class, "LAUNCHER_1");
+        LAUNCHER_TWO = hardwareMap.get(DcMotor.class, "LAUNCHER_2");
 
         INTAKE = hardwareMap.get(DcMotor.class, "INTAKE");
 

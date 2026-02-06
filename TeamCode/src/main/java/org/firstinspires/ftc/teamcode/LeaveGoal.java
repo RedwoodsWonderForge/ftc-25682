@@ -38,15 +38,6 @@ public class LeaveGoal{
     /**
      * Describe this function...
      */
-    public void autoDrive() {
-        backward();
-        turn();
-        backward();
-    }
-
-    /**
-     * Describe this function...
-     */
     private void prosessInputsAndSleep(int duration) {
         // "This makes the code cleaner"??
         processDriveInputs();

@@ -40,10 +40,12 @@ public class Shoot {
                 sleep(500);
             }
         }
-        Launcher.setPower(0);
+        Launcher_One.setPower(0);
+        Launcher_Two.setPower(0);
     }
     public void prepareMotor(){
-        Launcher.setPower(ShootPower);
+        Launcher_One.setPower(ShootPower);
+        Launcher_Two.setPower(ShootPower);
     }
     public void sleep(int milliseconds) {
         try {
