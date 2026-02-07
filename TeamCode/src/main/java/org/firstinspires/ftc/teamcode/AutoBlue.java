@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name = "AutoBlue")
+@Autonomous(name = "AutoBlue(not used)")
 public class AutoBlue extends LinearOpMode {
 
     private Limelight3A limelight;

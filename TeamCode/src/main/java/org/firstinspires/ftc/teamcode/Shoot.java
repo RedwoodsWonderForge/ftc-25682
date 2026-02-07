@@ -2,22 +2,23 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class Shoot {
     boolean IsShooting;
     private CRServo FeederRight;
     private CRServo FeederLeft;
     double ShootPower;
-    private DcMotor Launcher_One;
-    private DcMotor Launcher_Two;
+    private PIDCounterforce Launcher_One;
+    private PIDCounterforce Launcher_Two;
     private DcMotor Intake;
-    public Shoot (CRServo fLeft, CRServo fRight, DcMotor launchMotor,DcMotor launchMotor_2, DcMotor intake){
+    public Shoot (CRServo fLeft, CRServo fRight, DcMotorEx launchMotor_1, DcMotorEx launchMotor_2, DcMotor intake){
         FeederRight = fRight;
         FeederLeft = fLeft;
         this.Intake = intake;
-        Launcher_One = launchMotor;
-        Launcher_Two = launchMotor_2;
-        ShootPower = .45;
+        ShootPower = 5.5;
+        Launcher_One = new PIDCounterforce(launchMotor_1, 0.005, 0, 0);
+        Launcher_Two = new PIDCounterforce(launchMotor_2, 0.005, 0, 0);
     }
     private void feedShooter() {
         IsShooting = true;
@@ -40,13 +41,18 @@ public class Shoot {
                 sleep(500);
             }
         }
-        Launcher_One.setPower(0);
-        Launcher_Two.setPower(0);
+        Launcher_One.setSetPoint(0);
+        Launcher_One.update();
+        Launcher_Two.setSetPoint(0);
+        Launcher_Two.update();
     }
     public void prepareMotor(){
 
-        Launcher_One.setPower(ShootPower);
-        Launcher_Two.setPower(ShootPower);
+
+        Launcher_One.setSetPoint(ShootPower*22);
+        Launcher_One.update();
+        Launcher_Two.setSetPoint(ShootPower*22);
+        Launcher_Two.update();
     }
     public void sleep(int milliseconds) {
         try {

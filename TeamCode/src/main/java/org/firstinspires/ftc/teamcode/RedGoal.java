@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "RedGoalShoot")
@@ -17,16 +18,20 @@ public class RedGoal extends LinearOpMode {
     private CRServo RIGHT;
     private CRServo LEFT;
     private Servo Deflector;
-    private DcMotor LAUNCHER_ONE;
-    private DcMotor LAUNCHER_TWO;
+    private DcMotorEx LAUNCHER_ONE;
+    private DcMotorEx LAUNCHER_TWO;
     private DcMotor INTAKE;
+
 
     @Override
     public void runOpMode() {
         Deflector = hardwareMap.get(Servo.class, "Deflector");
 
-        LAUNCHER_ONE = hardwareMap.get(DcMotor.class, "LAUNCHER_1");
-        LAUNCHER_TWO = hardwareMap.get(DcMotor.class, "LAUNCHER_2");
+        Deflector.setPosition(0.97);
+
+        LAUNCHER_ONE = hardwareMap.get(DcMotorEx.class, "LAUNCHER_1");
+        LAUNCHER_TWO = hardwareMap.get(DcMotorEx.class, "LAUNCHER_2");
+
 
         INTAKE = hardwareMap.get(DcMotor.class, "INTAKE");
 
@@ -37,6 +42,8 @@ public class RedGoal extends LinearOpMode {
 
         RIGHT = hardwareMap.get(CRServo.class, "RIGHT");
         LEFT = hardwareMap.get(CRServo.class, "LEFT");
+        LAUNCHER_ONE.setDirection(DcMotorEx.Direction.REVERSE);
+
         shootUtil = new Shoot(LEFT, RIGHT, LAUNCHER_ONE, LAUNCHER_TWO, INTAKE);
 
 
@@ -44,12 +51,13 @@ public class RedGoal extends LinearOpMode {
         leaveGoal = new LeaveGoal(FL_MOTOR, FR_MOTOR, BL_MOTOR, BR_MOTOR, "CW");
         leaveGoal.initalSetup();
         waitForStart();
+        shootUtil.sleep(10000);
         shootUtil.prepareMotor();
-        shootUtil.sleep(15000);
-        leaveGoal.backward();
+        shootUtil.sleep(5000);
+        leaveGoal.backward(200);
         shootUtil.shootThreeArtifacts();
         leaveGoal.turn("CCW");
-        leaveGoal.backward();
+        leaveGoal.backward(300);
     }
 
 

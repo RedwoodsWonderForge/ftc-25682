@@ -10,14 +10,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class AimController {
     private Limelight3A Limelight;
     private IMU Imu;
+    private int Pipeline;
+    private final double limit = 0.5;
+
     private double MAX_DRIVE_POWER = .15;
     //CONSTRUCTOR
-    public AimController(Limelight3A limelight, IMU imu){
+    public AimController(Limelight3A limelight, IMU imu, int pipeline){
         Limelight = limelight;
         Imu = imu;
+        Pipeline = pipeline;
     }
     public double recalcualateYaw(){
-        return ((refreshPosition()[1] * 3) * MAX_DRIVE_POWER) /- 15;
+        return ((refreshPosition()[1] * 3) * MAX_DRIVE_POWER) /- 17;
 
     }
     public void start(){
@@ -25,12 +29,14 @@ public class AimController {
     }
     private void init() {
 
-        Limelight.pipelineSwitch(2);
         RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
         Imu.initialize(new IMU.Parameters(revHubOrientationOnRobot));
     }
-    public double[] refreshPosition() {
+    public double[] refreshPosition()
+    {
+
+        Limelight.pipelineSwitch(Pipeline);
         YawPitchRollAngles orientation = Imu.getRobotYawPitchRollAngles();
         Limelight.updateRobotOrientation(orientation.getYaw());
         LLResult llResult = Limelight.getLatestResult();
@@ -50,14 +56,14 @@ public class AimController {
         double motorPower = 0;
         double[] pos = refreshPosition();
          if (pos[0] < 4.0 && pos[0] > 0){
-            if(pos[0] < .6 ){
-                motorPower = 22*remapRange((pos[0]),0.65,0.21,70.0,80.0);
+            if(pos[0] < limit ){
+                motorPower = 22*remapRange((pos[0]),limit,0.21,66.0,80.0);
             }
             else {
-                motorPower = 22*remapRange((pos[0]),2.7,0.65,50.0,70.0);
+                motorPower = 22*remapRange((pos[0]),2.7,limit,53.0,66.0);
             }
 
-             deflectAngle = remapRange((pos[0]),2.7,0.21,0.97,0.5);
+             deflectAngle = remapRange((pos[0]),2.7,0.21,0.97,0.55);
          } else {motorPower = 0; deflectAngle = 0.97;}
 
 

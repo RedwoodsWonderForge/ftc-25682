@@ -67,12 +67,12 @@ public class LeaveGoal{
     /**
      * Describe this function...
      */
-    public void backward() {
+    public void backward(int distance) {
         forward = 1;
-        prosessInputsAndSleep(400);
+        prosessInputsAndSleep(distance);
     }
     public void turn(String direction) {
-        if (direction == "CCW") {
+        if (direction == "CW") {
             turn = -1;
         } else {
             turn = 1;

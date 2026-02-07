@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name = "AutoRed")
+@Autonomous(name = "AutoRed (not used)")
 public class AutoRed extends LinearOpMode {
 
     private Limelight3A limelight;
