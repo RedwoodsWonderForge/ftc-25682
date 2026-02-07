@@ -16,7 +16,7 @@ public class Shoot {
         FeederRight = fRight;
         FeederLeft = fLeft;
         this.Intake = intake;
-        ShootPower = 5;
+        ShootPower = 5.2;
         Launcher_One = new PIDCounterforce(launchMotor_1, 0.005, 0, 0);
         Launcher_Two = new PIDCounterforce(launchMotor_2, 0.005, 0, 0);
     }
