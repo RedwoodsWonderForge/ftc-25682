@@ -24,6 +24,9 @@ public class PIDCounterforce {
     public void setSetPoint(double setPoint) {
         this.setPoint = setPoint;
     }
+    public void stop() {
+        motor.setPower(0);
+    }
 
     public void update() {
         // Assuming you have a way to measure the current position or velocity

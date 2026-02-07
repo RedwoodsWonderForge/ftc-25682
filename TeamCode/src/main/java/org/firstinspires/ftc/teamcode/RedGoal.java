@@ -51,13 +51,27 @@ public class RedGoal extends LinearOpMode {
         leaveGoal = new LeaveGoal(FL_MOTOR, FR_MOTOR, BL_MOTOR, BR_MOTOR, "CW");
         leaveGoal.initalSetup();
         waitForStart();
-        shootUtil.sleep(10000);
+        shootUtil.sleep(1000);
         shootUtil.prepareMotor();
-        shootUtil.sleep(5000);
-        leaveGoal.backward(200);
+        shootUtil.sleep(1000);
+        leaveGoal.forward(220,-1);
+        shootUtil.sleep(2000);
         shootUtil.shootThreeArtifacts();
-        leaveGoal.turn("CCW");
-        leaveGoal.backward(300);
+        shootUtil.stopMotor();
+        leaveGoal.turn("CW", 230,.5);
+        shootUtil.sleep(400);
+        leaveGoal.strafe(900,-.5);
+        shootUtil.startIntake();
+        leaveGoal.forward(1200,.4);
+        leaveGoal.forward(800,-.5);
+        shootUtil.stopIntake();
+        shootUtil.prepareMotor();
+        leaveGoal.strafe(800,.5);
+        leaveGoal.turn("CCW", 235,.5);
+        shootUtil.sleep(2000);
+        shootUtil.shootThreeArtifacts();
+        shootUtil.stopMotor();
+
     }
 
 
