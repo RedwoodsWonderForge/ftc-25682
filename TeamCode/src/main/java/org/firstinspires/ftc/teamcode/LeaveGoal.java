@@ -67,23 +67,30 @@ public class LeaveGoal{
     /**
      * Describe this function...
      */
-    public void backward(int distance) {
-        forward = 1;
-        prosessInputsAndSleep(distance);
+    public void forward(int moveTime,double power) {
+
+        forward =-power;
+        prosessInputsAndSleep(moveTime);
     }
-    public void turn(String direction) {
+    public void turn(String direction, int turnTime, double power) {
         if (direction == "CW") {
-            turn = -1;
+            turn = -Math.abs(power);
         } else {
-            turn = 1;
+            turn = Math.abs(power);
         }
-
-        prosessInputsAndSleep(280);
+        prosessInputsAndSleep(turnTime);
     }
 
-    public void sleep(int milliseconds) {
+    public void strafe(int moveTime, double power){
+        strafe = power;
+        prosessInputsAndSleep(moveTime);
+    }
+
+
+
+    private void sleep(int milliseconds) {
         try {
-            Thread.sleep(milliseconds); // Pause for 'milliseconds'
+            Thread.sleep(Math.abs(milliseconds)); // Pause for 'milliseconds'
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Restore the interrupted status
         }

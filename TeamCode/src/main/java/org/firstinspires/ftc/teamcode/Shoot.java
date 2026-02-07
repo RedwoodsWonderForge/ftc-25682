@@ -16,7 +16,7 @@ public class Shoot {
         FeederRight = fRight;
         FeederLeft = fLeft;
         this.Intake = intake;
-        ShootPower = 5.5;
+        ShootPower = 5;
         Launcher_One = new PIDCounterforce(launchMotor_1, 0.005, 0, 0);
         Launcher_Two = new PIDCounterforce(launchMotor_2, 0.005, 0, 0);
     }
@@ -31,8 +31,8 @@ public class Shoot {
         IsShooting = false;
     }
     public void shootThreeArtifacts() {
-        int NArtifacts;
 
+        int NArtifacts;
         NArtifacts = 3;
         while (NArtifacts > 0) {
             if (!IsShooting) {
@@ -41,10 +41,6 @@ public class Shoot {
                 sleep(500);
             }
         }
-        Launcher_One.setSetPoint(0);
-        Launcher_One.update();
-        Launcher_Two.setSetPoint(0);
-        Launcher_Two.update();
     }
     public void prepareMotor(){
 
@@ -53,6 +49,16 @@ public class Shoot {
         Launcher_One.update();
         Launcher_Two.setSetPoint(ShootPower*22);
         Launcher_Two.update();
+    }
+    public void stopMotor(){
+        Launcher_One.stop();
+        Launcher_Two.stop();
+    }
+    public void startIntake(){
+        Intake.setPower(1);
+    }
+    public void stopIntake(){
+        Intake.setPower(0);
     }
     public void sleep(int milliseconds) {
         try {
