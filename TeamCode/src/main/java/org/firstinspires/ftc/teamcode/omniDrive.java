@@ -46,7 +46,7 @@ public class omniDrive extends LinearOpMode {
     private void initalSetup() {
         limelight = hardwareMap.get(Limelight3A.class, "Limelight");
         imu = hardwareMap.get(IMU.class, "imu");
-        aimController = new AimController(limelight, imu);
+        aimController = new AimController(limelight, imu,2);
 
     }
 
@@ -91,12 +91,12 @@ public class omniDrive extends LinearOpMode {
         launcherTwo = hardwareMap.get(DcMotorEx.class, "LAUNCHER_2");
         launcherOne = hardwareMap.get(DcMotorEx.class, "LAUNCHER_1");
 
-        PIDCounterforce launchPIDOne = new PIDCounterforce(launcherOne, 0.01, 0, 0);
-        PIDCounterforce launchPIDTwo = new PIDCounterforce(launcherTwo, 0.01, 0, 0);
+        PIDCounterforce launchPIDOne = new PIDCounterforce(launcherOne, 0.005, 0, 0);
+        PIDCounterforce launchPIDTwo = new PIDCounterforce(launcherTwo, 0.005, 0, 0);
         //LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        LEFT = hardwareMap.get(CRServo.class, "Feeder_Left");
-        RIGHT = hardwareMap.get(CRServo.class, "Feeder_Right");
+        LEFT = hardwareMap.get(CRServo.class, "LEFT");
+        RIGHT = hardwareMap.get(CRServo.class, "RIGHT");
         Deflector = hardwareMap.get(Servo.class, "Deflector");
         runtime = new ElapsedTime();
 
@@ -197,30 +197,31 @@ public class omniDrive extends LinearOpMode {
 //           LAUNCHER.setVelocity(launchPower);
 
             //Sets power to feeding servos.
+
+
             if (gamepad1.right_trigger > 0.1) {
                 feeder = 1;
-            } else feeder = 0;
-            if (gamepad1.right_bumper){
                 INTAKE.setPower(1);
-            } else {INTAKE.setPower(0);}
+            } else if (gamepad1.right_bumper) {
+                INTAKE.setPower(1);
+            } else {
+                INTAKE.setPower(0);
+                feeder = 0;
+            }
+
             LEFT.setPower(feeder);
             RIGHT.setPower(feeder*-1);
 
             if (gamepad1.dpad_down){
                 deflecPos = 0.5;
             }
-            if (gamepad1.dpad_left){
-                deflecPos = 0.8;
-            }
-            if (gamepad1.dpad_right){
-                deflecPos = 0.9;
-            }
+
             if (gamepad1.dpad_up){
                 deflecPos = 0.97;
             }
             Deflector.setPosition(deflecPos);
-            axial = gamepad1.left_stick_y;
-            lateral = -gamepad1.left_stick_x;
+            axial = gamepad1.left_stick_y/fineAim;
+            lateral = -gamepad1.left_stick_x/fineAim;
 
             //if( auto = true ) {get limelight} else {use right stick x} 
             yaw = gamepad1.x ? aimController.recalcualateYaw(): -gamepad1.right_stick_x/fineAim;
