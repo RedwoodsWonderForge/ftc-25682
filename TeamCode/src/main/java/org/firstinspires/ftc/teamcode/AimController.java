@@ -21,7 +21,7 @@ public class AimController {
         Pipeline = pipeline;
     }
     public double recalcualateYaw(){
-        return ((refreshPosition()[1] * 3) * MAX_DRIVE_POWER) /- 17;
+        return ((refreshPosition()[1] * 3) * MAX_DRIVE_POWER) /- 25;
 
     }
     public void start(){
