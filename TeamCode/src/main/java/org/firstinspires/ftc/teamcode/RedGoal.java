@@ -54,7 +54,7 @@ public class RedGoal extends LinearOpMode {
         shootUtil.sleep(10000);
         shootUtil.prepareMotor();
         shootUtil.sleep(1000);
-        leaveGoal.forward(220,-1);
+        leaveGoal.forward(250,-1);
         shootUtil.sleep(2000);
         leaveGoal.turn("CCW", 30,.5);
         shootUtil.shootThreeArtifacts();
@@ -73,6 +73,8 @@ public class RedGoal extends LinearOpMode {
         shootUtil.sleep(2000);
         shootUtil.shootThreeArtifacts();
         shootUtil.stopMotor();
+        leaveGoal.turn("CW", 255,.5);
+        leaveGoal.strafe(900,-.5);
 
     }
 
