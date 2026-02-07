@@ -22,12 +22,16 @@ public class BlueGoal extends LinearOpMode {
     private DcMotorEx LAUNCHER_TWO;
     private DcMotor INTAKE;
 
+
     @Override
     public void runOpMode() {
         Deflector = hardwareMap.get(Servo.class, "Deflector");
 
+        Deflector.setPosition(0.97);
+
         LAUNCHER_ONE = hardwareMap.get(DcMotorEx.class, "LAUNCHER_1");
         LAUNCHER_TWO = hardwareMap.get(DcMotorEx.class, "LAUNCHER_2");
+
 
         INTAKE = hardwareMap.get(DcMotor.class, "INTAKE");
 
@@ -39,6 +43,7 @@ public class BlueGoal extends LinearOpMode {
         RIGHT = hardwareMap.get(CRServo.class, "RIGHT");
         LEFT = hardwareMap.get(CRServo.class, "LEFT");
         LAUNCHER_ONE.setDirection(DcMotorEx.Direction.REVERSE);
+
         shootUtil = new Shoot(LEFT, RIGHT, LAUNCHER_ONE, LAUNCHER_TWO, INTAKE);
 
 
@@ -46,13 +51,29 @@ public class BlueGoal extends LinearOpMode {
         leaveGoal = new LeaveGoal(FL_MOTOR, FR_MOTOR, BL_MOTOR, BR_MOTOR, "CW");
         leaveGoal.initalSetup();
         waitForStart();
+        shootUtil.sleep(10000);
+        shootUtil.prepareMotor();
         shootUtil.sleep(1000);
-        //shootUtil.prepareMotor();
-        shootUtil.sleep(5000);
-        leaveGoal.forward(300,-1);
-        //shootUtil.shootThreeArtifacts();
-        leaveGoal.turn("CW",200,1);
-        leaveGoal.forward(300,-1);
+        leaveGoal.forward(220,-1);
+        shootUtil.sleep(2000);
+        leaveGoal.turn("CCW", 20,.5);
+        shootUtil.shootThreeArtifacts();
+        shootUtil.stopMotor();
+        leaveGoal.forward(220,-.5);
+        leaveGoal.turn("CCW", 230,.5);
+        shootUtil.sleep(400);
+        leaveGoal.strafe(900,.5);
+        shootUtil.startIntake();
+        leaveGoal.forward(1300,.4);
+        leaveGoal.forward(600,-.5);
+        shootUtil.stopIntake();
+        shootUtil.prepareMotor();
+        leaveGoal.strafe(800,-.5);
+        leaveGoal.turn("CW", 255,.5);
+        shootUtil.sleep(2000);
+        shootUtil.shootThreeArtifacts();
+        shootUtil.stopMotor();
+
     }
 
 
