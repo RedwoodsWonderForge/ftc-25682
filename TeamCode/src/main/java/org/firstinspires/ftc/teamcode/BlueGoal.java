@@ -54,7 +54,7 @@ public class BlueGoal extends LinearOpMode {
         shootUtil.sleep(10000);
         shootUtil.prepareMotor();
         shootUtil.sleep(1000);
-        leaveGoal.forward(250,-1);
+        leaveGoal.forward(300,-1);
         shootUtil.sleep(2000);
         leaveGoal.turn("CCW", 20,.5);
         shootUtil.shootThreeArtifacts();
@@ -62,13 +62,13 @@ public class BlueGoal extends LinearOpMode {
         leaveGoal.forward(220,-.5);
         leaveGoal.turn("CCW", 230,.5);
         shootUtil.sleep(400);
-        leaveGoal.strafe(900,.5);
+        leaveGoal.strafe(600,.5);
         shootUtil.startIntake();
         leaveGoal.forward(1300,.4);
         leaveGoal.forward(600,-.5);
         shootUtil.stopIntake();
         shootUtil.prepareMotor();
-        leaveGoal.strafe(800,-.5);
+        leaveGoal.strafe(500,-.5);
         leaveGoal.turn("CW", 255,.5);
         shootUtil.sleep(2000);
         shootUtil.shootThreeArtifacts();
