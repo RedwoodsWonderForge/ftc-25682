@@ -4,7 +4,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class PIDCounterforce {
-    private DcMotorEx motor;
+    private double variable;
     private double setPoint = 0.0; // Desired position or velocity
     private double kp = 0.1; // Proportional gain
     private double ki = 0.01; // Integral gain
@@ -13,8 +13,8 @@ public class PIDCounterforce {
     private double errorSum = 0.0;
     private double lastError = 0.0;
 
-    public PIDCounterforce(DcMotorEx motor, double kp, double ki, double kd) {
-        this.motor = motor;
+    public PIDCounterforce(double variable, double kp, double ki, double kd) {
+        this.variable = variable;
         this.kp = kp;
         this.ki = ki;
         this.kd = kd;
@@ -24,13 +24,13 @@ public class PIDCounterforce {
     public void setSetPoint(double setPoint) {
         this.setPoint = setPoint;
     }
-    public void stop() {
-        motor.setPower(0);
-    }
+   // public void stop() {
+       // motor.setPower(0);
+   // }
 
-    public void update() {
+    public double update() {
         // Assuming you have a way to measure the current position or velocity
-        double currentPosition = motor.getVelocity(); // Or current velocity
+        double currentPosition = variable; // Or current velocity
 
         // Calculate error
         double error = setPoint - currentPosition;
@@ -47,6 +47,6 @@ public class PIDCounterforce {
 
         // Apply output to the motor, limiting the power to a safe range
         double motorPower = Math.min(Math.max(output, -1.0), 1.0);
-        motor.setPower(motorPower);
+        return motorPower;
     }
 }

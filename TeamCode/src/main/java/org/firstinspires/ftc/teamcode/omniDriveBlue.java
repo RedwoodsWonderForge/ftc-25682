@@ -1,22 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@TeleOp(name = "omniDriveBlue")
-public class omniDriveBlue extends LinearOpMode {
+@TeleOp(name = "omniDrive")
+public class omniDrive extends LinearOpMode {
 
     private DcMotor FL_MOTOR;
     private DcMotor BL_MOTOR;
@@ -91,8 +87,7 @@ public class omniDriveBlue extends LinearOpMode {
         launcherTwo = hardwareMap.get(DcMotorEx.class, "LAUNCHER_2");
         launcherOne = hardwareMap.get(DcMotorEx.class, "LAUNCHER_1");
 
-        PIDCounterforce launchPIDOne = new PIDCounterforce(launcherOne, 0.005, 0, 0);
-        PIDCounterforce launchPIDTwo = new PIDCounterforce(launcherTwo, 0.005, 0, 0);
+        PIDCounterforce launchPID = new PIDCounterforce(launcherOne.getVelocity(), 0.01, 0, 0);
         //LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         LEFT = hardwareMap.get(CRServo.class, "LEFT");
@@ -119,6 +114,12 @@ public class omniDriveBlue extends LinearOpMode {
         BL_MOTOR.setDirection(DcMotor.Direction.FORWARD);
         FR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
         BR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
+
+        FL_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BL_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        FR_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        FL_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
         launcherOne.setDirection(DcMotorEx.Direction.REVERSE);
 
         // Wait for the game to start (driver presses START)
@@ -190,10 +191,9 @@ public class omniDriveBlue extends LinearOpMode {
                 deflecPos = solution[1];
                 // do auto aiming
             }
-            launchPIDOne.setSetPoint(launchPower);
-            launchPIDOne.update();
-            launchPIDTwo.setSetPoint(launchPower);
-            launchPIDTwo.update();
+            launchPID.setSetPoint(launchPower);
+            launcherTwo.setPower(Math.max(launchPID.update(), -0.01));
+            launcherOne.setPower(Math.max(launchPID.update(), -0.01));
 //           LAUNCHER.setVelocity(launchPower);
 
             //Sets power to feeding servos.
