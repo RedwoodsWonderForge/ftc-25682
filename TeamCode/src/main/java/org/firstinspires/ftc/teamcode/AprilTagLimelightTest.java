@@ -1,3 +1,5 @@
+// TODO Delete this file?
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -36,7 +38,6 @@ public class AprilTagLimelightTest extends OpMode {
 
     @Override
     public void loop() {
-
     }
     public void aim() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
