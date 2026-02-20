@@ -19,11 +19,10 @@ public class omniDrive extends LinearOpMode {
     private DcMotor FR_MOTOR;
     private DcMotor BR_MOTOR;
     private DcMotor INTAKE;
+    private DcMotorEx FEEDER;
     private DcMotorEx launcherOne;
     private DcMotorEx launcherTwo;
     public Servo Deflector;
-    public CRServo LEFT;
-    public CRServo RIGHT;
     private Limelight3A limelight;
     private IMU imu;
 
@@ -84,14 +83,13 @@ public class omniDrive extends LinearOpMode {
         FR_MOTOR = hardwareMap.get(DcMotor.class, "FR_MOTOR");
         BR_MOTOR = hardwareMap.get(DcMotor.class, "BR_MOTOR");
         INTAKE = hardwareMap.get(DcMotor.class, "INTAKE");
+        FEEDER = hardwareMap.get(DcMotorEx.class, "FEEDER");
         launcherTwo = hardwareMap.get(DcMotorEx.class, "LAUNCHER_2");
         launcherOne = hardwareMap.get(DcMotorEx.class, "LAUNCHER_1");
 
         PIDCounterforce launchPID = new PIDCounterforce(launcherOne.getVelocity(), 0.01, 0, 0);
         //LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        LEFT = hardwareMap.get(CRServo.class, "LEFT");
-        RIGHT = hardwareMap.get(CRServo.class, "RIGHT");
         Deflector = hardwareMap.get(Servo.class, "Deflector");
         runtime = new ElapsedTime();
 
@@ -119,6 +117,7 @@ public class omniDrive extends LinearOpMode {
         BL_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FR_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FL_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        FEEDER.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         launcherOne.setDirection(DcMotorEx.Direction.REVERSE);
 
@@ -211,8 +210,7 @@ public class omniDrive extends LinearOpMode {
                 feeder = 0;
             }
 
-            LEFT.setPower(feeder);
-            RIGHT.setPower(feeder*-1);
+            FEEDER.setPower(feeder);
 
             if (gamepad1.dpad_down){
                 deflecPos = 0.5;
