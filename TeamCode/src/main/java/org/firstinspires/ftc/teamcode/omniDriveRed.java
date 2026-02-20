@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 @TeleOp(name = "omniDrive")
-public class omniDrive extends LinearOpMode {
+public class omniDriveRed extends LinearOpMode {
 
     private DcMotor FL_MOTOR;
     private DcMotor BL_MOTOR;

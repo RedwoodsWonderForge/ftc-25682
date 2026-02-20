@@ -13,6 +13,7 @@ public class AimController {
     private int Pipeline;
     private final double limit = 0.5;
 
+    private LLResult resultCache;
     private double MAX_DRIVE_POWER = .15;
     //CONSTRUCTOR
     public AimController(Limelight3A limelight, IMU imu, int pipeline){
@@ -40,15 +41,28 @@ public class AimController {
         YawPitchRollAngles orientation = Imu.getRobotYawPitchRollAngles();
         Limelight.updateRobotOrientation(orientation.getYaw());
         LLResult llResult = Limelight.getLatestResult();
+        LLResult normalResult;
         if (llResult != null && llResult.isValid()) {
-//            Pose3D botPose = llResult.getBotpose_MT2();
-            return new double[] {llResult.getTa(), llResult.getTx()};
+            resultCache = llResult;
+            normalResult = llResult;
+        } else if (resultCache != null && resultCache.isValid()) {
+            normalResult = resultCache;
+        } else {
+            return new double[] {0,0};
         }
+        //Pose3D botPose = llResult.getBotpose_MT2();
+            return new double[] {normalResult.getTa(), normalResult.getTx()};
+//            if (resultCache != null && resultCache.isValid()){
+//
+//            } else {
+//
+//            }
+
         // getLimelightData
         //getTData
         //move y to range (during shooting and going to loading)
 
-        return new double[] {0,0};
+
     }
 
     public double[] fireControlSolution() {
