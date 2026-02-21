@@ -17,8 +17,8 @@ public class Shoot {
         FeederLeft = fLeft;
         this.Intake = intake;
         ShootPower = 5.2;
-        Launcher_One = new PIDCounterforce(launchMotor_1, 0.005, 0, 0);
-        Launcher_Two = new PIDCounterforce(launchMotor_2, 0.005, 0, 0);
+        Launcher_One = new PIDCounterforce(launchMotor_1.getVelocity(), 0.005, 0, 0);
+        Launcher_Two = new PIDCounterforce(launchMotor_2.getVelocity(), 0.005, 0, 0);
     }
     private void feedShooter() {
         IsShooting = true;
@@ -51,8 +51,8 @@ public class Shoot {
         Launcher_Two.update();
     }
     public void stopMotor(){
-        Launcher_One.stop();
-        Launcher_Two.stop();
+        //22auncher_One.stop();
+        //Launcher_Two.stop();
     }
     public void startIntake(){
         Intake.setPower(1);
