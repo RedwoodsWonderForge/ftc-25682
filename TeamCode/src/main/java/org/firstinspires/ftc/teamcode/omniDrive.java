@@ -4,6 +4,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -108,8 +109,8 @@ public class omniDrive extends LinearOpMode {
         // Reverse the direction (flip FORWARD <-> REVERSE ) of any wheel that runs backward.
         // Keep testing until ALL the wheels move the robot forward when you push the left joystick forward.
         // <--- Click blue icon to see important note re. testing motor directions.
-        FL_MOTOR.setDirection(DcMotor.Direction.FORWARD);
-        BL_MOTOR.setDirection(DcMotor.Direction.FORWARD);
+        FL_MOTOR.setDirection(DcMotor.Direction.REVERSE);
+        BL_MOTOR.setDirection(DcMotor.Direction.REVERSE);
         FR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
         BR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
 
@@ -199,7 +200,7 @@ public class omniDrive extends LinearOpMode {
 
 
             if (gamepad1.right_trigger > 0.1) {
-                feeder = 1;
+                feeder = -1;
                 INTAKE.setPower(1);
             } else if (gamepad1.right_bumper) {
                 INTAKE.setPower(1);

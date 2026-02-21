@@ -4,6 +4,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
-@TeleOp(name = "omniDrive")
+@TeleOp(name = "omniDriveRed")
 public class omniDriveRed extends LinearOpMode {
 
     private DcMotor FL_MOTOR;
@@ -112,8 +113,8 @@ public class omniDriveRed extends LinearOpMode {
         // <--- Click blue icon to see important note re. testing motor directions.
         FL_MOTOR.setDirection(DcMotor.Direction.FORWARD);
         BL_MOTOR.setDirection(DcMotor.Direction.FORWARD);
-        FR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
-        BR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
+        FR_MOTOR.setDirection(DcMotor.Direction.REVERSE);
+        BR_MOTOR.setDirection(DcMotor.Direction.REVERSE);
 
         FL_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BL_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
