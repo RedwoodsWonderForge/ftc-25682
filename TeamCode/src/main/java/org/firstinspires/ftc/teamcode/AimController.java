@@ -52,17 +52,10 @@ public class AimController {
         }
         //Pose3D botPose = llResult.getBotpose_MT2();
             return new double[] {normalResult.getTa(), normalResult.getTx()};
-//            if (resultCache != null && resultCache.isValid()){
-//
-//            } else {
-//
-//            }
 
-        // getLimelightData
-        //getTData
-        //move y to range (during shooting and going to loading)
-
-
+    }
+    public void clearCache(){
+        resultCache = null;
     }
 
     public double[] fireControlSolution() {

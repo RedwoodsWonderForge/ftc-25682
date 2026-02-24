@@ -13,8 +13,7 @@ public class PIDCounterforce {
     private double errorSum = 0.0;
     private double lastError = 0.0;
 
-    public PIDCounterforce(double variable, double kp, double ki, double kd) {
-        this.variable = variable;
+    public PIDCounterforce( double kp, double ki, double kd) {
         this.kp = kp;
         this.ki = ki;
         this.kd = kd;
@@ -24,16 +23,15 @@ public class PIDCounterforce {
     public void setSetPoint(double setPoint) {
         this.setPoint = setPoint;
     }
+    
    // public void stop() {
        // motor.setPower(0);
    // }
 
-    public double update() {
+    public double update(double variable) {
         // Assuming you have a way to measure the current position or velocity
-        double currentPosition = variable; // Or current velocity
-
         // Calculate error
-        double error = setPoint - currentPosition;
+        double error = setPoint - variable;
 
         // Update integral error
         errorSum += error;
@@ -46,7 +44,7 @@ public class PIDCounterforce {
         double output = kp * error + ki * errorSum + kd * derivativeError *-1;
 
         // Apply output to the motor, limiting the power to a safe range
-        double motorPower = Math.min(Math.max(output, -1.0), 1.0);
-        return motorPower;
+        double power = Math.min(Math.max(output, -1.0), 1.0);
+        return power;
     }
 }
