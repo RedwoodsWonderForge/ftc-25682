@@ -11,14 +11,18 @@ public class Shoot {
     double ShootPower;
     private PIDCounterforce Launcher_One;
     private PIDCounterforce Launcher_Two;
+    private DcMotorEx launcherOne;
+    private DcMotorEx launcherTwo;
     private DcMotor Intake;
     public Shoot (CRServo fLeft, CRServo fRight, DcMotorEx launchMotor_1, DcMotorEx launchMotor_2, DcMotor intake){
         FeederRight = fRight;
         FeederLeft = fLeft;
         this.Intake = intake;
         ShootPower = 5.2;
-        Launcher_One = new PIDCounterforce(launchMotor_1.getVelocity(), 0.005, 0, 0);
-        Launcher_Two = new PIDCounterforce(launchMotor_2.getVelocity(), 0.005, 0, 0);
+        launcherOne = launchMotor_1;
+        launcherTwo = launchMotor_2;
+        Launcher_One = new PIDCounterforce( 0.005, 0, 0);
+        Launcher_Two = new PIDCounterforce( 0.005, 0, 0);
     }
     private void feedShooter() {
         IsShooting = true;
@@ -46,9 +50,9 @@ public class Shoot {
 
 
         Launcher_One.setSetPoint(ShootPower*22);
-        Launcher_One.update();
+        Launcher_One.update(launcherTwo.getVelocity());
         Launcher_Two.setSetPoint(ShootPower*22);
-        Launcher_Two.update();
+        Launcher_Two.update(launcherOne.getVelocity());
     }
     public void stopMotor(){
         //22auncher_One.stop();

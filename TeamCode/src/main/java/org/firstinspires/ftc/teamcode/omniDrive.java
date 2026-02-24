@@ -88,7 +88,7 @@ public class omniDrive extends LinearOpMode {
         launcherTwo = hardwareMap.get(DcMotorEx.class, "LAUNCHER_2");
         launcherOne = hardwareMap.get(DcMotorEx.class, "LAUNCHER_1");
 
-        PIDCounterforce launchPID = new PIDCounterforce(launcherOne.getVelocity(), 0.01, 0, 0);
+        PIDCounterforce launchPID = new PIDCounterforce(0.01, 0.0, 0);
         //LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         Deflector = hardwareMap.get(Servo.class, "Deflector");
@@ -176,8 +176,8 @@ public class omniDrive extends LinearOpMode {
 
 
             if (gamepad1.left_bumper) {
-                launchPower = counter*22; //was first 30 then 21
-            } else launchPower = gamepad1.left_trigger;
+                launchPower = counter*28; //was first 30 then 21
+            }
 
             if (gamepad1.left_trigger > 0.1) {
                 fineAim = 4;
@@ -190,10 +190,13 @@ public class omniDrive extends LinearOpMode {
                launchPower = solution[0];
                deflecPos = solution[1];
                 // do auto aiming
+            } else {
+                aimController.clearCache();
             }
            launchPID.setSetPoint(launchPower);
-            launcherTwo.setPower(Math.max(launchPID.update(), -0.01));
-            launcherOne.setPower(Math.max(launchPID.update(), -0.01));
+            double pidPower = Math.max(launchPID.update(launcherOne.getVelocity()), -0.1);
+            launcherTwo.setPower(pidPower);
+            launcherOne.setPower(pidPower);
 //           LAUNCHER.setVelocity(launchPower);
 
             //Sets power to feeding servos.
@@ -253,12 +256,13 @@ public class omniDrive extends LinearOpMode {
             telemetry.addData("Back  left/Right", JavaUtil.formatNumber(backLeftPower, 4, 2) + ", " + JavaUtil.formatNumber(backRightPower, 4, 2));
             telemetry.addData("Left Trigger" , counter + " ");
             telemetry.addData("Feeder" , feeder + " ");
-            telemetry.addData("Current launch power" ,  launchPower/22 + " ");
+            telemetry.addData("Current launch power" ,  pidPower + " ");
             telemetry.addData("LimeLight Ta (range)" , aimController.remapRange(aimController.refreshPosition()[0],2.7,0.21,50.0,80.0) + " ");
             telemetry.addData("LimeLight Ta (range)" , aimController.refreshPosition()[0] + " ");
             //telemetry.addData("LimeLight Ta (range)" , aimController.refreshPosition()[0] + " ");
             telemetry.addData("LimeLight Tx (deviation)" , aimController.refreshPosition()[1] + " ");
             telemetry.addData("LimeLight Active", aimMode);
+            telemetry.addData("testing",launcherOne.getVelocity() + " ");
             telemetry.update();
         }
     }
