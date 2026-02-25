@@ -25,6 +25,19 @@ public class AimController {
         return ((refreshPosition()[1] * 3) * MAX_DRIVE_POWER) /- 25;
 
     }
+//    public void autoLock(){
+//        Limelight.pipelineSwitch(Pipeline);
+//        YawPitchRollAngles orientation = Imu.getRobotYawPitchRollAngles();
+//        Limelight.updateRobotOrientation(orientation.getYaw());
+//        LLResult llResult = Limelight.getLatestResult();
+//        LLResult normalResult;
+//        if (llResult != null && llResult.isValid()){
+//            double[] result = refreshPosition();
+//            while (Math.abs(result[1])>4){
+//
+//            }
+//        }
+//    }
     public void start(){
         Limelight.start();
     }

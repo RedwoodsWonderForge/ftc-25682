@@ -6,32 +6,28 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class Shoot {
     boolean IsShooting;
-    private CRServo FeederRight;
-    private CRServo FeederLeft;
+    private DcMotor Feeder;
     double ShootPower;
-    private PIDCounterforce Launcher_One;
-    private PIDCounterforce Launcher_Two;
+    private PIDCounterforce Launcher_pid;
+
     private DcMotorEx launcherOne;
     private DcMotorEx launcherTwo;
     private DcMotor Intake;
-    public Shoot (CRServo fLeft, CRServo fRight, DcMotorEx launchMotor_1, DcMotorEx launchMotor_2, DcMotor intake){
-        FeederRight = fRight;
-        FeederLeft = fLeft;
+    public Shoot (DcMotor feeder, DcMotorEx launchMotor_1, DcMotorEx launchMotor_2, DcMotor intake){
+        Feeder = feeder;
         this.Intake = intake;
         ShootPower = 5.2;
         launcherOne = launchMotor_1;
         launcherTwo = launchMotor_2;
-        Launcher_One = new PIDCounterforce( 0.005, 0, 0);
-        Launcher_Two = new PIDCounterforce( 0.005, 0, 0);
+        Launcher_pid = new PIDCounterforce( 0.005, 0, 0);
+
     }
     private void feedShooter() {
         IsShooting = true;
-        FeederRight.setPower(-1);
-        FeederLeft.setPower(1);
+        Feeder.setPower(-1);
         Intake.setPower(1);
         sleep(900);
-        FeederRight.setPower(0);
-        FeederLeft.setPower(0);
+        Feeder.setPower(0);
         IsShooting = false;
     }
     public void shootThreeArtifacts() {
@@ -47,12 +43,12 @@ public class Shoot {
         }
     }
     public void prepareMotor(){
+        Launcher_pid.setSetPoint(ShootPower*22);
+        Launcher_pid.update(launcherTwo.getVelocity());
 
-
-        Launcher_One.setSetPoint(ShootPower*22);
-        Launcher_One.update(launcherTwo.getVelocity());
-        Launcher_Two.setSetPoint(ShootPower*22);
-        Launcher_Two.update(launcherOne.getVelocity());
+        double pidPower = Math.max(Launcher_pid.update(launcherOne.getVelocity()), -0.1);
+        launcherTwo.setPower(pidPower);
+        launcherOne.setPower(pidPower);
     }
     public void stopMotor(){
         //22auncher_One.stop();

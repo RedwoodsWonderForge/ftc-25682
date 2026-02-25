@@ -46,25 +46,6 @@ public class omniDrive extends LinearOpMode {
 
     }
 
-
-    /**
-     * This OpMode illustrates driving a 4-motor Omni-Directional (or Holonomic) robot.
-     * This code will work with either a Mecanum-Drive or an X-Drive train.
-     * Note that a Mecanum drive must display an X roller-pattern when viewed from above.
-     *
-     * Also note that it is critical to set the correct rotation direction for each motor. See details below.
-     *
-     * Holonomic drives provide the ability for the robot to move in three axes (directions) simultaneously.
-     * Each motion axis is controlled by one Joystick axis.
-     *
-     * 1) Axial -- Driving forward and backward -- Left-joystick Forward/Backward
-     * 2) Lateral -- Strafing right and left -- Left-joystick Right and Left
-     * 3) Yaw -- Rotating Clockwise and counter clockwise -- Right-joystick Right and Left
-     *
-     * This code is written assuming that the right-side motors need to be reversed for the robot to drive forward.
-     * When you first test your robot, if it moves backward when you push the left stick forward, then you must flip
-     * the direction of all 4 motors (see code below).
-     */
     @Override
     public void runOpMode() {
         ElapsedTime runtime;
@@ -94,21 +75,6 @@ public class omniDrive extends LinearOpMode {
         Deflector = hardwareMap.get(Servo.class, "Deflector");
         runtime = new ElapsedTime();
 
-        // ########################################################################################
-        // !!! IMPORTANT Drive Information. Test your motor directions. !!!!!
-        // ########################################################################################
-        //
-        // Most robots need the motors on one side to be reversed to drive forward.
-        // The motor reversals shown here are for a "direct drive" robot
-        // (the wheels turn the same direction as the motor shaft).
-        //
-        // If your robot has additional gear reductions or uses a right-angled drive, it's important to ensure
-        // that your motors are turning in the correct direction. So, start out with the reversals here, BUT
-        // when you first test your robot, push the left joystick forward and observe the direction the wheels turn.
-        //
-        // Reverse the direction (flip FORWARD <-> REVERSE ) of any wheel that runs backward.
-        // Keep testing until ALL the wheels move the robot forward when you push the left joystick forward.
-        // <--- Click blue icon to see important note re. testing motor directions.
         FL_MOTOR.setDirection(DcMotor.Direction.REVERSE);
         BL_MOTOR.setDirection(DcMotor.Direction.REVERSE);
         FR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
@@ -170,10 +136,6 @@ public class omniDrive extends LinearOpMode {
             if (counter<0){
                 counter = 0;
             }
-
-
-
-
 
             if (gamepad1.left_bumper) {
                 launchPower = counter*28; //was first 30 then 21
