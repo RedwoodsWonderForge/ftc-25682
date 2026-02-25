@@ -88,9 +88,8 @@ public class omniDriveBlue extends LinearOpMode {
         launcherTwo = hardwareMap.get(DcMotorEx.class, "LAUNCHER_2");
         launcherOne = hardwareMap.get(DcMotorEx.class, "LAUNCHER_1");
 
-        PIDCounterforce launchPID = new PIDCounterforce(0.01, 0.0, 0);
-        //LAUNCHER.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
+        PIDCounterforce launchPID = new PIDCounterforce(0.003, 0, 0);
+        PIDCounterforce aimPID = new PIDCounterforce(0.75, 0.1, 0);
         Deflector = hardwareMap.get(Servo.class, "Deflector");
         runtime = new ElapsedTime();
 
@@ -226,9 +225,9 @@ public class omniDriveBlue extends LinearOpMode {
             Deflector.setPosition(deflecPos);
             axial = gamepad1.left_stick_y/fineAim;
             lateral = -gamepad1.left_stick_x/fineAim;
-
+            aimPID.setSetPoint(0.0);
             //if( auto = true ) {get limelight} else {use right stick x}
-            yaw = gamepad1.x ? aimController.recalcualateYaw(): -gamepad1.right_stick_x/fineAim;
+            yaw = gamepad1.x ? -aimPID.update(aimController.recalcualateYaw()): -gamepad1.right_stick_x/fineAim;
 
             frontLeftPower = axial + lateral + yaw;
             frontRightPower = (axial - lateral) - yaw;
