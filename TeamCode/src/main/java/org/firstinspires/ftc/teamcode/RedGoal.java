@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "RedGoalShoot")
@@ -15,8 +17,7 @@ public class RedGoal extends LinearOpMode {
     private DcMotor FR_MOTOR;
     private DcMotor BL_MOTOR;
     private DcMotor BR_MOTOR;
-    private CRServo RIGHT;
-    private CRServo LEFT;
+    private DcMotor FEEDER;
     private Servo Deflector;
     private DcMotorEx LAUNCHER_ONE;
     private DcMotorEx LAUNCHER_TWO;
@@ -40,15 +41,21 @@ public class RedGoal extends LinearOpMode {
         BL_MOTOR = hardwareMap.get(DcMotor.class, "BL_MOTOR");
         BR_MOTOR = hardwareMap.get(DcMotor.class, "BR_MOTOR");
 
-        RIGHT = hardwareMap.get(CRServo.class, "RIGHT");
-        LEFT = hardwareMap.get(CRServo.class, "LEFT");
+        FEEDER = hardwareMap.get(DcMotorEx.class, "FEEDER");
+
         LAUNCHER_ONE.setDirection(DcMotorEx.Direction.REVERSE);
-
-        shootUtil = new Shoot(LEFT, RIGHT, LAUNCHER_ONE, LAUNCHER_TWO, INTAKE);
-
-
+        FEEDER.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Servo rgbOne = hardwareMap.get(Servo.class, "RGB_ONE");
+        Servo rgbTwo = hardwareMap.get(Servo.class, "RGB_TWO");
+        shootUtil = new Shoot(FEEDER, LAUNCHER_ONE, LAUNCHER_TWO, INTAKE);
+        Limelight3A limelight = hardwareMap.get(Limelight3A.class, "Limelight");
+        IMU imu = hardwareMap.get(IMU.class, "imu");
+        AimController aimController = new AimController(limelight, imu,2);
+        RGBIndicator rgb1 = new RGBIndicator(rgbOne);
+        RGBIndicator rgb2 = new RGBIndicator(rgbTwo);
 
         leaveGoal = new LeaveGoal(FL_MOTOR, FR_MOTOR, BL_MOTOR, BR_MOTOR, "CW");
+
         leaveGoal.initalSetup();
         waitForStart();
         shootUtil.sleep(10000);
@@ -57,7 +64,10 @@ public class RedGoal extends LinearOpMode {
         leaveGoal.forward(300,-1);
         shootUtil.sleep(2000);
         leaveGoal.turn("CCW", 30,.5);
+        rgb2.setColor("red");
+        autoAim(aimController);
         shootUtil.shootThreeArtifacts();
+        rgb2.setColor("blue");
         shootUtil.stopMotor();
         leaveGoal.forward(220,-.5);
         leaveGoal.turn("CW", 230,.5);
@@ -71,11 +81,21 @@ public class RedGoal extends LinearOpMode {
         leaveGoal.strafe(500,.5);
         leaveGoal.turn("CCW", 255,.5);
         shootUtil.sleep(2000);
+        rgb2.setColor("red");
+        autoAim(aimController);
         shootUtil.shootThreeArtifacts();
+        rgb2.setColor("blue");
+
         shootUtil.stopMotor();
         leaveGoal.turn("CW", 255,.5);
         leaveGoal.strafe(900,-.5);
-
+        rgb2.setColor("green");
+    }
+    public void autoAim(AimController aimC){
+        double[] result = aimC.refreshPosition();
+        while (Math.abs(result[1])>4){
+            leaveGoal.turn("CCW", 255, aimC.recalcualateYaw());
+        }
     }
 
 

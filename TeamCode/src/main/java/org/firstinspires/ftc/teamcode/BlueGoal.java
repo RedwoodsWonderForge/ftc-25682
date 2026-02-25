@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "BlueGoalShoot")
@@ -15,8 +17,7 @@ public class BlueGoal extends LinearOpMode {
     private DcMotor FR_MOTOR;
     private DcMotor BL_MOTOR;
     private DcMotor BR_MOTOR;
-    private CRServo RIGHT;
-    private CRServo LEFT;
+    private DcMotor FEEDER;
     private Servo Deflector;
     private DcMotorEx LAUNCHER_ONE;
     private DcMotorEx LAUNCHER_TWO;
@@ -32,7 +33,6 @@ public class BlueGoal extends LinearOpMode {
         LAUNCHER_ONE = hardwareMap.get(DcMotorEx.class, "LAUNCHER_1");
         LAUNCHER_TWO = hardwareMap.get(DcMotorEx.class, "LAUNCHER_2");
 
-
         INTAKE = hardwareMap.get(DcMotor.class, "INTAKE");
 
         FL_MOTOR = hardwareMap.get(DcMotor.class, "FL_MOTOR");
@@ -40,11 +40,18 @@ public class BlueGoal extends LinearOpMode {
         BL_MOTOR = hardwareMap.get(DcMotor.class, "BL_MOTOR");
         BR_MOTOR = hardwareMap.get(DcMotor.class, "BR_MOTOR");
 
-        RIGHT = hardwareMap.get(CRServo.class, "RIGHT");
-        LEFT = hardwareMap.get(CRServo.class, "LEFT");
-        LAUNCHER_ONE.setDirection(DcMotorEx.Direction.REVERSE);
+        FEEDER = hardwareMap.get(DcMotorEx.class, "FEEDER");
 
-        shootUtil = new Shoot(LEFT, RIGHT, LAUNCHER_ONE, LAUNCHER_TWO, INTAKE);
+        LAUNCHER_ONE.setDirection(DcMotorEx.Direction.REVERSE);
+        Servo rgbOne = hardwareMap.get(Servo.class, "RGB_ONE");
+        Servo rgbTwo = hardwareMap.get(Servo.class, "RGB_TWO");
+        shootUtil = new Shoot(FEEDER, LAUNCHER_ONE, LAUNCHER_TWO, INTAKE);
+        Limelight3A limelight = hardwareMap.get(Limelight3A.class, "Limelight");
+        IMU imu = hardwareMap.get(IMU.class, "imu");
+        AimController aimController = new AimController(limelight, imu,2);
+        RGBIndicator rgb1 = new RGBIndicator(rgbOne);
+        RGBIndicator rgb2 = new RGBIndicator(rgbTwo);
+        shootUtil = new Shoot(FEEDER, LAUNCHER_ONE, LAUNCHER_TWO, INTAKE);
 
 
 
