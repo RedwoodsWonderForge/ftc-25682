@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-public class LeaveGoal{
+public class AutoDrive {
 
 
     private DcMotor FlMotor;
@@ -15,7 +15,7 @@ public class LeaveGoal{
     double strafe;
     private String Direction;
 
-    public LeaveGoal(DcMotor flMotor, DcMotor frMotor, DcMotor blMotor, DcMotor brMotor, String direction) {
+    public AutoDrive(DcMotor flMotor, DcMotor frMotor, DcMotor blMotor, DcMotor brMotor, String direction) {
         FlMotor = flMotor;
         FR_MOTOR = frMotor;
         BL_MOTOR = blMotor;
@@ -74,9 +74,9 @@ public class LeaveGoal{
     }
     public void turn(String direction, int turnTime, double power) {
         if (direction == "CW") {
-            turn = -Math.abs(power);
+            turn = power;
         } else {
-            turn = Math.abs(power);
+            turn = power;
         }
         prosessInputsAndSleep(turnTime);
     }

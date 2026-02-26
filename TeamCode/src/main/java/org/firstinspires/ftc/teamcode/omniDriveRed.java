@@ -32,11 +32,6 @@ public class omniDriveRed extends LinearOpMode {
     double frontRightPower;
     double backRightPower;
     AimController aimController;
-    double forward;
-    double turn;
-    double strafe;
-    double maxDrivePower;
-    // int testing = 0;
     double counter = 50.0;
 
     private void initalSetup() {
@@ -227,6 +222,9 @@ public class omniDriveRed extends LinearOpMode {
             lateral = -gamepad1.left_stick_x/fineAim;
             aimPID.setSetPoint(0.0);
             //if( auto = true ) {get limelight} else {use right stick x}
+            if (!gamepad1.x){
+                aimPID.resetPID();
+            }
             yaw = gamepad1.x ? -aimPID.update(aimController.recalcualateYaw()): -gamepad1.right_stick_x/fineAim;
 
             frontLeftPower = axial + lateral + yaw;

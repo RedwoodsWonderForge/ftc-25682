@@ -196,6 +196,7 @@ public class omniDriveBlue extends LinearOpMode {
             double pidPower = Math.max(launchPID.update(launcherOne.getVelocity()), -0.1);
             launcherTwo.setPower(pidPower);
             launcherOne.setPower(pidPower);
+
 //           LAUNCHER.setVelocity(launchPower);
 
             //Sets power to feeding servos.
@@ -227,6 +228,9 @@ public class omniDriveBlue extends LinearOpMode {
             lateral = -gamepad1.left_stick_x/fineAim;
             aimPID.setSetPoint(0.0);
             //if( auto = true ) {get limelight} else {use right stick x}
+            if (!gamepad1.x){
+                aimPID.resetPID();
+            }
             yaw = gamepad1.x ? -aimPID.update(aimController.recalcualateYaw()): -gamepad1.right_stick_x/fineAim;
 
             frontLeftPower = axial + lateral + yaw;
