@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "BlueGoalShoot")
-public class BlueGoal extends LinearOpMode {
+@Autonomous(name = "BlueGoalClose")
+public class BlueGoalClose extends LinearOpMode {
     AutoDrive autoDrive;
     Shoot shootUtil;
     private DcMotor FL_MOTOR;
@@ -39,6 +39,11 @@ public class BlueGoal extends LinearOpMode {
         BL_MOTOR = hardwareMap.get(DcMotor.class, "BL_MOTOR");
         BR_MOTOR = hardwareMap.get(DcMotor.class, "BR_MOTOR");
 
+        FL_MOTOR.setDirection(DcMotor.Direction.REVERSE);
+        BL_MOTOR.setDirection(DcMotor.Direction.REVERSE);
+        FR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
+        BR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
+
         FEEDER = hardwareMap.get(DcMotorEx.class, "FEEDER");
 
         LAUNCHER_ONE.setDirection(DcMotorEx.Direction.REVERSE);
@@ -48,12 +53,14 @@ public class BlueGoal extends LinearOpMode {
         shootUtil = new Shoot(FEEDER, LAUNCHER_ONE, LAUNCHER_TWO, INTAKE,Deflector);
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, "Limelight");
         IMU imu = hardwareMap.get(IMU.class, "imu");
-        AimController aimController = new AimController(limelight, imu,2);
+        AimController aimController = new AimController(limelight, imu,1);
         RGBIndicator rgb1 = new RGBIndicator(rgbOne);
         RGBIndicator rgb2 = new RGBIndicator(rgbTwo);
+        PIDCounterforce aimPID = new PIDCounterforce(0.75, 0.5, 0);
+        aimPID.setSetPoint(0.0);
 
         autoDrive = new AutoDrive(FL_MOTOR, FR_MOTOR, BL_MOTOR, BR_MOTOR, "CW");
-
+        limelight.start();
         autoDrive.initalSetup();
         waitForStart();
 //        shootUtil.sleep(10000);
@@ -62,37 +69,28 @@ public class BlueGoal extends LinearOpMode {
         shootUtil.sleep(2000);
         rgb2.setColor("red");
         rgb1.setColor("red");
-        autoAim(aimController);
+        autoAim(aimController,aimPID);
         shootUtil.pewPewPew(aimController);
         rgb2.setColor("blue");
         rgb1.setColor("blue");
+        autoDrive.strafe(1000,.5);
 
-//        autoDrive.forward(220,-.5);
-//        autoDrive.turn("CW", 230,.5);
-//        shootUtil.sleep(400);
-//        autoDrive.strafe(600,-.5);
-//        shootUtil.startIntake();
-//        autoDrive.forward(1300,.4);
-//        autoDrive.forward(600,-.5);
-//        shootUtil.stopIntake();
-//        shootUtil.prepareMotor();
-//        autoDrive.strafe(500,.5);
-//        autoDrive.turn("CCW", 255,.5);
-//        shootUtil.sleep(2000);
-//        rgb2.setColor("red");
-//        autoAim(aimController);
-//        shootUtil.shootThreeArtifacts();
-//        rgb2.setColor("blue");
-//
-//        shootUtil.stopMotor();
-//        autoDrive.turn("CW", 255,.5);
-//        autoDrive.strafe(900,-.5);
         rgb2.setColor("green");
+        shootUtil.sleep(500);
+
     }
-    public void autoAim(AimController aimC){
+    public void autoAim(AimController aimC,PIDCounterforce aimPID){
         double[] result = aimC.refreshPosition();
-        while (Math.abs(result[1])>4){
-            autoDrive.turn("CCW", 255, aimC.recalcualateYaw());
+        telemetry.addData("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM", result[1] + " ");
+        telemetry.update();
+        while (Math.abs(result[1])>1.7){
+            result = aimC.refreshPosition();
+            telemetry.addData("aim", Math.abs(result[1]) + " ");
+            telemetry.update();
+            autoDrive.turn("CCW", 255, -aimPID.update(aimC.recalcualateYaw()));
+            if (Math.abs(result[1])<1.7){
+                break;
+            }
         }
     }
 

@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name = "RedGoalShoot")
-public class RedGoal extends LinearOpMode {
+@Autonomous(name = "RedGoalClose")
+public class RedGoalClose extends LinearOpMode {
     AutoDrive autoDrive;
     Shoot shootUtil;
     private DcMotor FL_MOTOR;
@@ -65,7 +65,7 @@ public class RedGoal extends LinearOpMode {
         waitForStart();
 //        shootUtil.sleep(10000);
         shootUtil.sleep(1000);
-        //autoDrive.forward(300,-1);
+        autoDrive.forward(300,-1);
         shootUtil.sleep(2000);
         rgb2.setColor("red");
         rgb1.setColor("red");
@@ -73,27 +73,8 @@ public class RedGoal extends LinearOpMode {
         shootUtil.pewPewPew(aimController);
         rgb2.setColor("blue");
         rgb1.setColor("blue");
-        //autoDrive.strafe(1000,-.5);
-//        autoDrive.forward(220,-.5);
-//        autoDrive.turn("CW", 230,.5);
-//        shootUtil.sleep(400);
-//        autoDrive.strafe(600,-.5);
-//        shootUtil.startIntake();
-//        autoDrive.forward(1300,.4);
-//        autoDrive.forward(600,-.5);
-//        shootUtil.stopIntake();
-//        shootUtil.prepareMotor();
-//        autoDrive.strafe(500,.5);
-//        autoDrive.turn("CCW", 255,.5);
-//        shootUtil.sleep(2000);
-//        rgb2.setColor("red");
-//        autoAim(aimController);
-//        shootUtil.shootThreeArtifacts();
-//        rgb2.setColor("blue");
-//
-//        shootUtil.stopMotor();
-//        autoDrive.turn("CW", 255,.5);
-//        autoDrive.strafe(900,-.5);
+        autoDrive.strafe(1000,-.5);
+
         rgb2.setColor("green");
         shootUtil.sleep(500);
 
