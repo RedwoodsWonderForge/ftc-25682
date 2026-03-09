@@ -72,7 +72,7 @@ public class BlueGoalFar extends LinearOpMode {
         shootUtil.pewPewPew(aimController);
         rgb2.setColor("blue");
         rgb1.setColor("blue");
-        autoDrive.turn("CWW", 200, 0.5);
+        autoDrive.turn("CW", 200, 0.5);
         autoDrive.strafe(1200,.5);
 
         rgb2.setColor("green");

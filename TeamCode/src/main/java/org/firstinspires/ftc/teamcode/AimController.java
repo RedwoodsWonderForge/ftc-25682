@@ -77,7 +77,7 @@ public class AimController {
         double[] pos = refreshPosition();
          if (pos[0] < 4.0 && pos[0] > 0){
             if(pos[0] < limit ){
-                motorPower = 22*remapRange((pos[0]),limit,0.21,66.0,85.0);
+                motorPower = 22*remapRange((pos[0]),limit,0.21,66.0,82.0);
             }
             else {
                 motorPower = 22*remapRange((pos[0]),2.7,limit,53.0,66.0);

@@ -65,7 +65,7 @@ public class RedGoalClose extends LinearOpMode {
         waitForStart();
 //        shootUtil.sleep(10000);
         shootUtil.sleep(1000);
-        autoDrive.forward(300,-1);
+        autoDrive.forward(250,-1);
         shootUtil.sleep(2000);
         rgb2.setColor("red");
         rgb1.setColor("red");
