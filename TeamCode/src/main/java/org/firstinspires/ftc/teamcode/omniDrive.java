@@ -69,8 +69,8 @@ public class omniDrive extends LinearOpMode {
         launcherTwo = hardwareMap.get(DcMotorEx.class, "LAUNCHER_2");
         launcherOne = hardwareMap.get(DcMotorEx.class, "LAUNCHER_1");
 
-        PIDCounterforce launchPID = new PIDCounterforce(0.003, 0, 0);
-        PIDCounterforce aimPID = new PIDCounterforce(0.75, 0.1, 0);
+        PIDCounterforce launchPID = new PIDCounterforce(0.0035, 0, 0);
+        PIDCounterforce aimPID = new PIDCounterforce(0.75, 0.075, 0.05);
         Deflector = hardwareMap.get(Servo.class, "Deflector");
         runtime = new ElapsedTime();
 
