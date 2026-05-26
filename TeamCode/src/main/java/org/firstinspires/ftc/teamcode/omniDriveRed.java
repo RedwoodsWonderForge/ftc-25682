@@ -203,6 +203,7 @@ public class omniDriveRed extends LinearOpMode {
                 INTAKE.setPower(1);
             } else if (gamepad1.dpad_left) {
                 INTAKE.setPower(-1);
+                FEEDER.setPower(-1);
             } else {
                 INTAKE.setPower(0);
                 feeder = 0;
