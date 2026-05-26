@@ -33,7 +33,9 @@ public class outreachTeleop extends LinearOpMode {
     double backRightPower;
     AimController aimController;
     double counter = 50.0;
-
+    double pidPower = 0;
+    double powerCheck = 0;
+    boolean speedGood = false;
     private void initalSetup() {
         limelight = hardwareMap.get(Limelight3A.class, "Limelight");
         imu = hardwareMap.get(IMU.class, "imu");
@@ -135,7 +137,7 @@ public class outreachTeleop extends LinearOpMode {
             // axial = gamepad1.left_stick_y;
             // lateral = gamepad1.left_stick_x;
             // yaw = gamepad1.right_stick_x/fineAim;
-            double launchPower = gamepad1.left_trigger;
+            double launchPower = 0;
             double feeder = 0;
             double testing = 0;
 
@@ -151,13 +153,6 @@ public class outreachTeleop extends LinearOpMode {
                 counter --; //was 10
                 aPressed = false;
             }
-            if(gamepad1.x){
-                xPressed = true;
-            }
-            if (!gamepad1.x && xPressed){
-                aimMode = !aimMode;
-                xPressed = false;
-            }
             if (counter>100.0){
                 counter = 100.0;
             }
@@ -170,54 +165,71 @@ public class outreachTeleop extends LinearOpMode {
             } else fineAim = 2;
 
             // Send calculated power to wheels and launcher.
-            if (gamepad1.x) {
-                aimController.refreshPosition();
-                solution = aimController.fireControlSolution();
-                launchPower = solution[0];
-                deflecPos = solution[1];
-                // do auto aiming
-            } else {
-                aimController.clearCache();
-            }
-            launchPID.setSetPoint(launchPower);
-            double pidPower = Math.max(launchPID.update(launcherOne.getVelocity()), -0.1);
-            launcherTwo.setPower(pidPower);
-            launcherOne.setPower(pidPower);
+//            if (gamepad1.x) {
+//                aimController.refreshPosition();
+//                solution = aimController.fireControlSolution();
+//                launchPower = solution[0];
+//                deflecPos = solution[1];
+//                // do auto aiming
+//            } else {
+//                aimController.clearCache();
+//            }
+
 //           LAUNCHER.setVelocity(launchPower);
 
             //Sets power to feeding servos.
 
 
             if (gamepad1.right_trigger > 0.1) {
-                feeder = -1;
-                INTAKE.setPower(1);
-            } else if (gamepad1.right_bumper) {
+
+                aimController.refreshPosition();
+                solution = aimController.fireControlSolution();
+                launchPower = solution[0];
+                deflecPos = solution[1];
+                powerCheck = launcherOne.getVelocity()*1.1;
+                double threshold = 50;
+                if( powerCheck > launchPower-threshold  && powerCheck < launchPower + threshold  ){
+                    speedGood = true;
+                    feeder = -1;
+                    INTAKE.setPower(1);
+                } else {
+                    speedGood = false;
+                    aimPID.resetPID();
+                    aimController.clearCache();
+                }
+
+                } else if (gamepad1.left_trigger > 0.1) {
                 INTAKE.setPower(1);
             } else if (gamepad1.dpad_left) {
                 INTAKE.setPower(-1);
+                //pidPower = -1;
+                feeder = 1;
             } else {
                 INTAKE.setPower(0);
                 feeder = 0;
+                speedGood = false;
+                aimPID.resetPID();
+                aimController.clearCache();
             }
-
+            launchPID.setSetPoint(launchPower);
+             pidPower = Math.max(launchPID.update(launcherOne.getVelocity()), -0.1);
+            launcherTwo.setPower(pidPower);
+            launcherOne.setPower(pidPower);
             FEEDER.setPower(feeder);
 
-            if (gamepad1.dpad_down){
-                deflecPos = 0.5;
-            }
+//            if (gamepad1.left_trigger > 0.1){
+//                deflecPos = 0.5;
+//            }
 
-            if (gamepad1.dpad_up){
-                deflecPos = 0.97;
-            }
+//            if (gamepad1.dpad_up){
+//                deflecPos = 0.97;
+//            }
             Deflector.setPosition(deflecPos);
             axial = gamepad1.left_stick_y/fineAim;
             lateral = -gamepad1.left_stick_x/fineAim;
             aimPID.setSetPoint(0.0);
             //if( auto = true ) {get limelight} else {use right stick x}
-            if (!gamepad1.x){
-                aimPID.resetPID();
-            }
-            yaw = gamepad1.x ? -aimPID.update(aimController.recalcualateYaw()): -gamepad1.right_stick_x/fineAim;
+            yaw = speedGood ? -aimPID.update(aimController.recalcualateYaw()): -gamepad1.right_stick_x/fineAim;
 
             frontLeftPower = axial + lateral + yaw;
             frontRightPower = (axial - lateral) - yaw;
@@ -251,7 +263,8 @@ public class outreachTeleop extends LinearOpMode {
             //telemetry.addData("LimeLight Ta (range)" , aimController.refreshPosition()[0] + " ");
             telemetry.addData("LimeLight Tx (deviation)" , aimController.refreshPosition()[1] + " ");
             telemetry.addData("LimeLight Active", aimMode);
-            telemetry.addData("testing",launcherOne.getVelocity() + " ");
+            telemetry.addData("testing speed",powerCheck + " ");
+            telemetry.addData("testing power",launchPower + " ");
             telemetry.update();
         }
     }
