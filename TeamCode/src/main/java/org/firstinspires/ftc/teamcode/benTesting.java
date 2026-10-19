@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -50,14 +51,14 @@ public class benTesting extends LinearOpMode {
         runtime = new ElapsedTime();
 
         FL_MOTOR.setDirection(DcMotor.Direction.REVERSE);
-        BL_MOTOR.setDirection(DcMotor.Direction.REVERSE);
+        BL_MOTOR.setDirection(DcMotor.Direction.FORWARD);
         FR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
-        BR_MOTOR.setDirection(DcMotor.Direction.FORWARD);
+        BR_MOTOR.setDirection(DcMotor.Direction.REVERSE);
 
         FL_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         BL_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         FR_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        FL_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        BR_MOTOR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
