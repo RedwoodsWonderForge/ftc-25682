@@ -37,7 +37,6 @@ public class PIDCounterforce {
     public double update(double variable) {
         // Assuming you have a way to measure the current position or velocity
         // Calculate error
-
         double error = setPoint - variable;
 
         // Update integral error
@@ -48,7 +47,6 @@ public class PIDCounterforce {
 
         // Calculate PID output
          output = kp * error + ki * errorSum + kd * derivativeError *-1;
-
 
         if (output>1){
             output = 1;

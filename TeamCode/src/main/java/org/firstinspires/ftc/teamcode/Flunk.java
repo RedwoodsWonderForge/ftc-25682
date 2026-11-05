@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -25,6 +26,11 @@ public class Flunk extends LinearOpMode {
         FR_MOTOR = hardwareMap.get(DcMotor.class, "FR_MOTOR");
         BL_MOTOR = hardwareMap.get(DcMotor.class, "BL_MOTOR");
         BR_MOTOR = hardwareMap.get(DcMotor.class, "BR_MOTOR");
+
+       FL_MOTOR.setDirection(DcMotorEx.Direction.REVERSE);
+       BL_MOTOR.setDirection(DcMotorEx.Direction.FORWARD);
+       FR_MOTOR.setDirection(DcMotorEx.Direction.REVERSE);
+       BR_MOTOR.setDirection(DcMotorEx.Direction.REVERSE);
        //
        //FL_MOTOR.set
     waitForStart();
