@@ -42,6 +42,7 @@ public class teleop_main extends LinearOpMode {
     boolean aPress;
     boolean yPress;
     // int testing = 0:
+    public PIDCounterforce launchPID = new PIDCounterforce(1,0,0);
 
     private void initalSetup() {
     }
@@ -127,9 +128,9 @@ public class teleop_main extends LinearOpMode {
             }
             if(gamepad1.dpad_down){
                 if(gamepad1.left_stick_x > 0.02){
-                    carouselPos += 1;
+                    carouselPos += 0.5;
                 } else if(gamepad1.left_stick_x < -0.02){
-                    carouselPos -= 1;
+                    carouselPos -= 0.5;
                 }
             }
 
@@ -139,7 +140,7 @@ public class teleop_main extends LinearOpMode {
                 aPress = true;
             }
             if (!gamepad1.a && aPress) {
-                launchPower += increment; //was 10
+                launchPower += increment;
                 aPress = false;
             }
             if (gamepad1.y) {
@@ -149,11 +150,11 @@ public class teleop_main extends LinearOpMode {
                 launchPower -= increment;
                 yPress = false;
             }
-
+            //launchPID.setSetPoint(-0.09);
             if (gamepad1.right_trigger > 0.1){
+                LAUNCHER.setVelocity(launchPower*2360);
 
-
-                LAUNCHER.setPower(launchPower);
+                //LAUNCHER.setPower(launchPID.update(LAUNCHER.getVelocity())/-1);
             } else LAUNCHER.setPower(0);
 
             if (gamepad1.right_bumper){
@@ -192,7 +193,9 @@ public class teleop_main extends LinearOpMode {
             telemetry.addData("Back  left/Right", JavaUtil.formatNumber(backLeftPower, 4, 2) + ", " + JavaUtil.formatNumber(backRightPower, 4, 2));
             //telemetry.addData("counter", + counter);
             telemetry.addData("carousel position", + CAROUSEL.getCurrentPosition());
-            telemetry.addData("launch power", + launchPower);
+            telemetry.addData("launch power: ", + launchPower*21);
+            telemetry.addData("launch speed: ", + LAUNCHER.getVelocity());
+            telemetry.addData("launcher power", + LAUNCHER.getPower());
             telemetry.update();
         }
     }

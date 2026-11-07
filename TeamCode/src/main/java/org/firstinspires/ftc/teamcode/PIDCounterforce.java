@@ -24,10 +24,7 @@ public class PIDCounterforce {
     public void setSetPoint(double setPoint) {
         this.setPoint = setPoint;
     }
-    
-   // public void stop() {
-       // motor.setPower(0);
-   // }
+
     public void resetPID(){
         derivativeError = 0;
         lastError = 0;
