@@ -55,8 +55,6 @@ public class teleop_main extends LinearOpMode {
         double yaw;
 
 
-
-
         FL_MOTOR = hardwareMap.get(DcMotorEx.class, "FL_MOTOR");
         BL_MOTOR = hardwareMap.get(DcMotorEx.class, "BL_MOTOR");
         FR_MOTOR = hardwareMap.get(DcMotorEx.class, "FR_MOTOR");
@@ -126,14 +124,13 @@ public class teleop_main extends LinearOpMode {
                 carouselPos -= carouselTicks;
                 LPadPress = false;
             }
-            if(gamepad1.dpad_down){
-                if(gamepad1.left_stick_x > 0.02){
+            if (gamepad1.dpad_down) {
+                if (gamepad1.left_stick_x > 0.02) {
                     carouselPos += 0.5;
-                } else if(gamepad1.left_stick_x < -0.02){
+                } else if (gamepad1.left_stick_x < -0.02) {
                     carouselPos -= 0.5;
                 }
             }
-
 
 
             if (gamepad1.a) {
@@ -151,22 +148,22 @@ public class teleop_main extends LinearOpMode {
                 yPress = false;
             }
             //launchPID.setSetPoint(-0.09);
-            if (gamepad1.right_trigger > 0.1){
-                LAUNCHER.setVelocity(launchPower*2360);
+            if (gamepad1.right_trigger > 0.1) {
+                LAUNCHER.setVelocity(launchPower * 2360);
 
                 //LAUNCHER.setPower(launchPID.update(LAUNCHER.getVelocity())/-1);
             } else LAUNCHER.setPower(0);
 
-            if (gamepad1.right_bumper){
+            if (gamepad1.right_bumper) {
                 FLICKER.setPosition(0.63);
             } else FLICKER.setPosition(0.91);
 
-            if(gamepad1.left_bumper){
+            if (gamepad1.left_bumper) {
                 INTAKE.setPower(1);
-            } else if (gamepad1.dpad_up){
+            } else if (gamepad1.dpad_up) {
                 INTAKE.setPower(-1);
             } else INTAKE.setPower(0);
-            CAROUSEL.setTargetPosition((int)carouselPos);
+            CAROUSEL.setTargetPosition((int) carouselPos);
             CAROUSEL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             CAROUSEL.setPower(1);
 
@@ -191,14 +188,12 @@ public class teleop_main extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime);
             telemetry.addData("Front left/Right", JavaUtil.formatNumber(frontLeftPower, 4, 2) + ", " + JavaUtil.formatNumber(frontRightPower, 4, 2));
             telemetry.addData("Back  left/Right", JavaUtil.formatNumber(backLeftPower, 4, 2) + ", " + JavaUtil.formatNumber(backRightPower, 4, 2));
-            //telemetry.addData("counter", + counter);
-            telemetry.addData("carousel position", + CAROUSEL.getCurrentPosition());
-            telemetry.addData("launch power: ", + launchPower*21);
-            telemetry.addData("launch speed: ", + LAUNCHER.getVelocity());
-            telemetry.addData("launcher power", + LAUNCHER.getPower());
+            telemetry.addData("counter", +carouselPos / 1425.1);
+            telemetry.addData("carousel position", +CAROUSEL.getCurrentPosition() / 1425.1);
+            telemetry.addData("launch power: ", +launchPower * 21);
+            telemetry.addData("launch speed: ", +LAUNCHER.getVelocity());
+            telemetry.addData("launcher power", +LAUNCHER.getPower());
             telemetry.update();
         }
     }
-
-
 }
